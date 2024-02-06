@@ -17,3 +17,9 @@ Timer 0 - Unused but should be kept empty because of possible library dependenci
 Timer 1 - left & right motor
 
 Timer 2 - Unused
+
+# Interrupts
+
+OCIE1A - left motor
+
+OCIE1B - right motor
