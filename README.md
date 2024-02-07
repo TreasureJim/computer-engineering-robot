@@ -12,9 +12,9 @@
 
 # Timers
 
-Timer 0 - Unused but should be kept empty because of possible library dependencies
+Timer 0 - left & right motor
 
-Timer 1 - left & right motor
+Timer 1 - Unused
 
 Timer 2 - Unused
 
