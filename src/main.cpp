@@ -1,27 +1,39 @@
 #include <Arduino.h>
+#include <stdio.h>
 
-#define SERVO_PIN 10
-int pulsewidth;
-
-void procedure(int angle);
+#define left_sensor 14
+#define right_sensor 15
+#define mid_sensor 16
 
 void setup()
 {
-	pinMode(SERVO_PIN, OUTPUT);
-	pinMode(9, OUTPUT);
+	pinMode(left_sensor, INPUT);
+	pinMode(right_sensor, INPUT);
+	pinMode(mid_sensor, INPUT);
+	Serial.begin(9600);
 }
 
 void loop()
 {
-	procedure(90);
-	delay(100);
-}
+	int sensors[3] = {left_sensor, right_sensor, mid_sensor};
+	int sensors_values[3];
+	for(int i = 0; i < 10000; i++) {
+		for(int i = 0; i < 3; i++) {
+			sensors_values[i] = analogRead(sensors[i]);
+			Serial.print("Sensor value at ");
+			Serial.print(sensors[i]);
+			Serial.print(": ");
+			Serial.print(sensors_values[i]);
+			Serial.print(" ");
+			
+		}
+	}
+	Serial.print("\n");
+	delay(200);
 
-void procedure(int angle)
-{
-	pulsewidth = angle * 11 + 500;
-	digitalWrite(SERVO_PIN, HIGH);
-	delayMicroseconds(pulsewidth);
-	digitalWrite(SERVO_PIN, LOW);
-	delay(20 - pulsewidth / 1000);
+	// uint16_t sensor_value = analogRead(right_sensor);
+	// Serial.print("Sensor value: ");
+	// Serial.print(sensor_value);
+	// Serial.print("\n");
+	// delay(200);
 }
