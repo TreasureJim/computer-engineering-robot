@@ -1,3 +1,6 @@
+#include <avr/delay.h>
+#include <avr/interrupt.h>
+
 #include <Arduino.h>
 #include <stdio.h>
 
@@ -36,4 +39,3 @@ void loop()
 	// Serial.print(sensor_value);
 	// Serial.print("\n");
 	// delay(200);
-}
