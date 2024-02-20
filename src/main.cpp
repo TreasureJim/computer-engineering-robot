@@ -1,27 +1,15 @@
+#include <avr/delay.h>
+#include <avr/interrupt.h>
+
 #include <Arduino.h>
 
-#define SERVO_PIN 10
-int pulsewidth;
+#include "motor.h"
+#include <pins.h>
 
-void procedure(int angle);
-
-void setup()
+int main()
 {
-	pinMode(SERVO_PIN, OUTPUT);
-	pinMode(9, OUTPUT);
-}
+	sei();
 
-void loop()
-{
-	procedure(90);
-	delay(100);
-}
-
-void procedure(int angle)
-{
-	pulsewidth = angle * 11 + 500;
-	digitalWrite(SERVO_PIN, HIGH);
-	delayMicroseconds(pulsewidth);
-	digitalWrite(SERVO_PIN, LOW);
-	delay(20 - pulsewidth / 1000);
+	initialise_motors();
+	// start_motors();
 }
