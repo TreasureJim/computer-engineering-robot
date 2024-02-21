@@ -26,16 +26,16 @@ uint8_t analogread(uint8_t channel) {
     return ADCH;
 }
 
-void getLimits(uint8_t channel, uint8_t* min, uint8_t* max) {
+void getLimits(uint8_t* min, uint8_t* max) {
     uint8_t localmin = 255;
     uint8_t localmax = 0;
     for(int i = 0; i <= 1000; i++) {
-        uint8_t reading = analogread(channel);
+        uint8_t avg = getAverageValue();
         _delay_ms(10);
-        if (reading < localmin) {
-            localmin = reading;
-        } else if (reading > localmax) {
-            localmax = reading;
+        if (avg < localmin) {
+            localmin = avg;
+        } else if (avg > localmax) {
+            localmax = avg;
         }
     }
     *min = localmin;
@@ -44,13 +44,15 @@ void getLimits(uint8_t channel, uint8_t* min, uint8_t* max) {
 
 ///@brief Gets the average value of the readings of the IR sensors
 ///@return Average value of the 3 middle sensors
-// uint8_t getAverageValue() {
-//     uint8_t v1 = analogread(right_sensor);
-//     uint8_t v2 = analogread(left_sensor);
-//     uint8_t v3 = analogread(mid_sensor);
-//     return ((v1 + v2 + v3) / 3);
-// }
+uint8_t getAverageValue() {
+    uint8_t v1 = analogread(right_sensor);
+    uint8_t v2 = analogread(left_sensor);
+    uint8_t v3 = analogread(mid_sensor);
+    return ((v1 + v2 + v3) / 3);
+}
 
 float getScaledValue(uint8_t val, uint8_t *min, uint8_t *max) {
     return ((float)(val - *min) / (float)(*max - *min));
 }
+
+//
