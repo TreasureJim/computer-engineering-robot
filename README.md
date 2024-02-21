@@ -23,3 +23,7 @@ Timer 2 - Unused
 OCIE1A - left motor
 
 OCIE1B - right motor
+
+# Bluetooth
+
+Name of bluetooth module is `HMSoft`
