@@ -4,7 +4,14 @@
 #include <Arduino.h>
 
 #include "motor.h"
-#include <pins.h>
+#include "pins.h"
+#include "pid.h"
+
+PIDController pidcontroller;
+
+#define Kp 10
+#define Ki 0
+#define Kd 0
 
 int main()
 {
@@ -12,4 +19,6 @@ int main()
 
 	initialise_motors();
 	// start_motors();
+
+	PIDController_Init(&pidcontroller, Kp, Ki, Kd);
 }
