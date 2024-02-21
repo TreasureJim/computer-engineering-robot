@@ -26,6 +26,12 @@ uint8_t analogread(uint8_t channel) {
     return ADCH;
 }
 
+/// @brief Calculates the minimum and maximum value of the
+/// average value taken from the 3 middle IR sensors.
+/// This function does not return any values. Instead, the pointers
+/// passed as parameters will be set outside this function.
+/// @param min pointer to the min variable
+/// @param max pointer to the max variable
 void getLimits(uint8_t* min, uint8_t* max) {
     uint8_t localmin = 255;
     uint8_t localmax = 0;
@@ -51,8 +57,12 @@ uint8_t getAverageValue() {
     return ((v1 + v2 + v3) / 3);
 }
 
-float getScaledValue(uint8_t val, uint8_t *min, uint8_t *max) {
-    return ((float)(val - *min) / (float)(*max - *min));
+/// @brief This function calculates a scaled value between 0 and 1.
+/// 
+/// @param val Value given by the IR sensor
+/// @param min min value of the value parameter
+/// @param max max value of the value parameter
+/// @return A float between 0 and 1 based on the parameters passed
+float getScaledValue(uint8_t value, uint8_t *min, uint8_t *max) {
+    return ((float)(value - *min) / (float)(*max - *min));
 }
-
-//
