@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <util/delay.h>
 #include <avr/io.h>
+#include <stdlib.h>
 
 //PORT C, pin 0
 #define right_sensor PINC0
@@ -11,7 +12,10 @@
 #define left_sensor PINC1
 //PORT C, pin 2
 #define mid_sensor PINC2
+#define NUM_OF_SENSORS 3
 
-void initalize_sensors();
+void initialize_sensors();
+uint8_t analogread(uint8_t channel);
+void readIRsensors(uint8_t* sensorValues);
 
 #endif
