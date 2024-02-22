@@ -26,22 +26,23 @@ uint8_t analogread(uint8_t channel) {
     return ADCH;
 }
 
-/// @brief Calculates the minimum and maximum value of the
-/// average value taken from the 3 middle IR sensors.
+/// @brief Calculates the minimum and maximum value of the sensor
+/// on the chosen channel
 /// This function does not return any values. Instead, the pointers
 /// passed as parameters will be set outside this function.
+/// @param channel Analog channel which the sensor is connected to
 /// @param min pointer to the min variable
 /// @param max pointer to the max variable
-void getLimits(uint8_t *min, uint8_t *max) {
+void getLimits(uint8_t channel, uint8_t *min, uint8_t *max) {
     uint8_t localmin = 255;
     uint8_t localmax = 0;
-    for(int i = 0; i <= 1000; i++) {
-        uint8_t avg = getAverageValue();
+    for(int i = 0; i <= 200; i++) {
+        uint8_t val = analogread(channel);
         _delay_ms(10);
-        if (avg < localmin) {
-            localmin = avg;
-        } else if (avg > localmax) {
-            localmax = avg;
+        if (val < localmin) {
+            localmin = val;
+        } else if (val > localmax) {
+            localmax = val;
         }
     }
     *min = localmin;
