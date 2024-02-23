@@ -26,50 +26,53 @@ uint8_t analogread(uint8_t channel) {
     return ADCH;
 }
 
-/// @brief Calculates the minimum and maximum value of the sensor
-/// on the chosen channel
+/// @brief Calculates the minimum and maximum value of the sensors
 /// This function does not return any values. Instead, the pointers
 /// passed as parameters will be set outside this function.
-/// @param channel Analog channel which the sensor is connected to
 /// @param min pointer to the min variable
 /// @param max pointer to the max variable
-void getLimits(uint8_t channel, uint8_t *min, uint8_t *max) {
-    uint8_t localmin = 255;
-    uint8_t localmax = 0;
-    for(int i = 0; i <= 200; i++) {
-        uint8_t val = analogread(channel);
+void getLimits(uint8_t *min, uint8_t *max) {
+    uint8_t localMin = 255;
+    uint8_t localMax = 0;
+    for(int i = 0; i <= 500; i++) {
+        uint8_t val = getAverageValue();
         _delay_ms(10);
-        if (val < localmin) {
-            localmin = val;
-        } else if (val > localmax) {
-            localmax = val;
+        if (val < localMin) {
+            localMin = val;
+        } else if (val > localMax) {
+            localMax = val;
         }
     }
-    *min = localmin;
-    *max = localmax;
+    *min = localMin;
+    *max = localMax;
 }
 
-///@brief Gets the average value of the readings of the IR sensors
-///@return Average value of the 3 middle sensors
+///@brief Calculates the average value of the readings of the IR sensors
+///@return Average value of all sensors
 uint8_t getAverageValue() {
     uint8_t v1 = analogread(rightMidSensor);
     uint8_t v2 = analogread(leftMidSensor);
     uint8_t v3 = analogread(midMidSensor);
-    return ((v1 + v2 + v3) / 3);
+    uint8_t v4 = analogread(leftSensor);
+    uint8_t v5 = analogread(rightSensor);
+    return ((v1 + v2 + v3 + v4 + v5) / 5);
 }
 
-/// @brief This function calculates a scaled value between 0 and 1.
-/// @param val Value given by the IR sensor
-/// @param min min value of the value parameter
-/// @param max max value of the value parameter
-/// @return A float between 0 and 1 based on the parameters passed
-float getScaledValue(uint8_t value, uint8_t *min, uint8_t *max) {
-    return ((float)(value - *min) / (float)(*max - *min));
+/// @brief Calculates a scaled value of the average value of all sensors.
+/// getAverageValue() is called to get the values from the sensors and is
+/// then scaled to a value between 0 and 1.
+/// @param min min value of the average
+/// @param max max value of the average
+/// @return A float between 0 and 1 based on the given min and max values.
+float getScaledValue(uint8_t *min, uint8_t *max) {
+    uint8_t avg = getAverageValue();
+    return ((float)(avg - *min) / (float)(*max - *min));
 }
 
-// This file needs to be reformatted if the scaling for the additional 2 sensors isn't working properly
-// Either reformatted or some code is going to be duplicated to account for the additional 2 sensors
-// Some functions are made entirely to accomodate the 3 middle sensors and calculating based on the average
-// value that was received such as getLimits().
-// For testing, the additional sensors must be connected to the on-board arduino and the connections must be fixed
-// Otherwise the test values are inaccurate.
+void calibrateSensors(uint8_t *min, uint8_t *max) {
+    uint8_t localMin;
+    uint8_t localMax;
+    getLimits(&localMin, &localMax);
+    *min = localMin;
+    *max = localMax;
+}
