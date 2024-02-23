@@ -1,9 +1,9 @@
 #include "irsensor.h"
-
+#include "pins.h"
 /// @brief Sensor initialization for the DDR and ADC.
 void initialize_sensors() {
     // Set the DDR as input for port C (analog pins)
-    DDRC |= (0 << rightMidSensor) | (0 << leftMidSensor) | (0 << midMidSensor);
+    DDRC |= (0 << rightMidSensor) | (0 << leftMidSensor) | (0 << midMidSensor) | (0 << leftSensor) | (0 << rightSensor);
     //REFS0 - External Reference voltage (+5V)
     //ADLAR - Left shift the resulting ADC register (Only ADCH can be read)
     ADMUX |= (1 << REFS0) | (1 << ADLAR);
