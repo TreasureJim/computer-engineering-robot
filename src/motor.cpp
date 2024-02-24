@@ -9,7 +9,7 @@
 #define MOTOR_R_BASE_SPEED 100
 
 #define TIMER_TOP 0xFF
-#define MOTOR_MIN_PWM 100
+#define MOTOR_MIN_PWM 200
 
 /// @brief Initialise motor and timer registers
 void initialise_motors()

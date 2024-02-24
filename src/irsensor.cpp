@@ -1,5 +1,6 @@
 #include "irsensor.h"
 #include "pins.h"
+#include "motor.h"
 /// @brief Sensor initialization for the DDR and ADC.
 void initialize_sensors() {
     // Set the DDR as input for port C (analog pins)
@@ -34,7 +35,7 @@ uint8_t analogread(uint8_t channel) {
 void getLimits(uint8_t *min, uint8_t *max) {
     uint8_t localMin = 255;
     uint8_t localMax = 0;
-    for(int i = 0; i <= 500; i++) {
+    for(int i = 0; i <= 1000; i++) {
         uint8_t val = getAverageValue();
         _delay_ms(10);
         if (val < localMin) {
@@ -70,9 +71,13 @@ float getScaledValue(uint8_t *min, uint8_t *max) {
 }
 
 void calibrateSensors(uint8_t *min, uint8_t *max) {
+    start_motors();
+    _delay_ms(2000);
+    drive_motors(1);
     uint8_t localMin;
     uint8_t localMax;
     getLimits(&localMin, &localMax);
     *min = localMin;
     *max = localMax;
+    cut_motors();
 }

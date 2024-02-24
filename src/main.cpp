@@ -1,6 +1,7 @@
 #include "irsensor.h"
-
+#include "motor.h"
 int main() {
+	initialise_motors();
 	initialize_sensors();
 	Serial.begin(9600);
 	uint8_t min;
