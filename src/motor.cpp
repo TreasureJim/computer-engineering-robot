@@ -9,7 +9,7 @@
 #define MOTOR_R_BASE_SPEED 100
 
 #define TIMER_TOP 0xFF
-#define MOTOR_MIN_PWM 100
+#define MOTOR_MIN_PWM 150
 
 /// @brief Initialise motor and timer registers
 void initialise_motors()
@@ -55,4 +55,11 @@ void start_motors()
 void cut_motors()
 {
 	TCCR0A &= ~(0b11 << COM0A0 | 0b11 << COM0B0);
+}
+
+void motorCalibration() {
+	//left motor
+	OCR0A = 150; 
+	//right motor
+	OCR0B = 0;
 }

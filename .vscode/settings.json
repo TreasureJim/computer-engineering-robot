@@ -1,6 +1,10 @@
 {
 	"files.associations": {
 		"*.rmd": "markdown",
-		"interrupt.h": "c"
-	}
+		"interrupt.h": "c",
+		"arduino.h": "c",
+		"binary.h": "c",
+		"hardwareserial.h": "c"
+	},
+	"C_Cpp.errorSquiggles": "disabled"
 }
