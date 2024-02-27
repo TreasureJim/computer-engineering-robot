@@ -16,7 +16,7 @@ void initialize_sensors() {
 /// @brief Reads the analog value on the analog pins
 /// @param channel 0-4
 /// @return Value of the ADCH register
-uint8_t analogread(uint8_t channel) {
+uint8_t readSensor(uint8_t channel) {
     //Unsets the channel bits from previous call and preserve the upper 4 bits of the ADMUX register
     //0x60 Keeps the REFS0 and ADLAR bits set (0110)
     ADMUX = (ADMUX & 0x60) | (channel & 0x0F);
@@ -51,12 +51,12 @@ void getLimits(uint8_t *min, uint8_t *max) {
 ///@brief Calculates the average value of the readings of the IR sensors
 ///@return Average value of all sensors
 uint8_t getAverageValue() {
-    uint8_t v1 = analogread(rightMidSensor);
-    uint8_t v2 = analogread(leftMidSensor);
-    uint8_t v3 = analogread(midMidSensor);
-    uint8_t v4 = analogread(leftSensor);
-    uint8_t v5 = analogread(rightSensor);
-    return ((v1 + v2 + v3 + v4 + v5) / 5);
+    // uint8_t v1 = readSensor(rightMidSensor);
+    // uint8_t v2 = readSensor(leftMidSensor);
+    // uint8_t v3 = readSensor(midMidSensor);
+    uint8_t v4 = readSensor(leftSensor);
+    uint8_t v5 = readSensor(rightSensor);
+    return ((v4 + v5) / 2);
 }
 
 /// @brief Calculates a scaled value of the average value of all sensors.
@@ -70,10 +70,13 @@ float getScaledValue(uint8_t *min, uint8_t *max) {
     return ((float)(avg - *min) / (float)(*max - *min));
 }
 
+/// @brief Calibrates the sensors to find mimimum and maximum value
+/// @param min min value of sensors
+/// @param max max value of sensors
 void calibrateSensors(uint8_t *min, uint8_t *max) {
     start_motors();
-    _delay_ms(2000);
-    drive_motors(1);
+    _delay_ms(1000);
+    motorCalibration();
     uint8_t localMin;
     uint8_t localMax;
     getLimits(&localMin, &localMax);
