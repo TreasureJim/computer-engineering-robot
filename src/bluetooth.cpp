@@ -1,5 +1,6 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
+#include <string.h>
 
 #define BAUD 9600
 #include <util/setbaud.h>
@@ -13,27 +14,63 @@ void initialise_bluetooth()
 	UCSR0B = 0b1 << TXEN0 | 0b1 << TXCIE0 | 0b1 << RXCIE0 | 0b1 << RXEN0;
 
 	UCSR0C = 0b11 << UCSZ00;
-
-	DDRB = 0xff;
 }
+
+void send_bytes(uint8_t *bytes, uint8_t n)
+{
+	// TODO
+}
+
+void (*finalise_command)() = nullptr;
+uint8_t received_bytes[4];
+uint8_t byte_count = 0;
+uint8_t byte_count_goal = 0;
 
 ISR(USART_RX_vect)
 {
-	char in = UDR0;
-
-	if (in == '1')
+	if (!finalise_command)
 	{
-		PORTB = 0xff;
+		return receive_command();
+	}
 
-		while (!(UCSR0A & (1 << UDRE0)))
-			;
-		UDR0 = 'y';
-	}
-	else if (in == '0')
+	// we are processing a command
+	if (byte_count <= byte_count_goal)
 	{
-		PORTB = 0x00;
-		while (!(UCSR0A & (1 << UDRE0)))
-			;
-		UDR0 = 'n';
+		// receive a byte
+		received_bytes[byte_count] = UDR0;
+		byte_count++;
+		return;
 	}
+	else
+	{
+		(*finalise_command)();
+	}
+}
+
+void receive_command()
+{
+	byte_count = 0;
+	byte_count_goal = 0;
+
+	char command = UDR0;
+
+	switch (command)
+	{
+	case 0x02:
+		recieve_Kp();
+		break;
+	}
+}
+
+void recieve_Kp()
+{
+	byte_count_goal = 3;
+	finalise_command = &set_Kp;
+}
+
+void set_Kp()
+{
+	float received;
+	memcpy(&received, received_bytes, 4);
+	// TODO: Set Kp
 }

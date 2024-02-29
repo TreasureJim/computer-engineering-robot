@@ -30,4 +30,16 @@ OCIE1B - right motor
 
 # Bluetooth
 
-Name of bluetooth module is `HMSoft`
+Name of bluetooth module is ... (TODO)
+
+## API
+
+Each separate `|` represents a separate byte message
+
+Load calibration - `0x01` (Unfinished)
+
+Set Kp - `0x02 | value (4 bytes float)`
+
+Set Ki - `0x03 | value (4 bytes float)`
+
+Set Kd - `0x04 | value (4 bytes float)`
