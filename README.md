@@ -12,6 +12,8 @@
 
 [`motor.h`](include/motor.h) - initialise and control the motors
 
+[`irsensor.h`](include/irsensor.h) - initialization and functionality of IR sensors
+
 # Timers
 
 Timer 0 - left & right motor

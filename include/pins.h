@@ -22,7 +22,16 @@
 #define MOTOR_R_PWM 6
 
 /// LINE SENSOR
-
+//PORT C, pin 0
+#define rightMidSensor PINC2
+//PORT C, pin 1
+#define leftMidSensor PINC1
+//PORT C, pin 2
+#define midMidSensor PINC4
+//PORT C, pin 3
+#define leftSensor PINC0
+//PORTC, pin 4
+#define rightSensor PINC3
 /// BLUETOOTH
 
 /// ULTRASONIC / DISTANCE SENSOR
