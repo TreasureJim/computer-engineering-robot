@@ -12,4 +12,6 @@ void start_motors();
 
 void cut_motors();
 
+void motorCalibration();
+
 #endif

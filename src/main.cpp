@@ -1,24 +1,29 @@
-#include <avr/delay.h>
-#include <avr/interrupt.h>
-
-#include <Arduino.h>
-
+#include "irsensor.h"
 #include "motor.h"
 #include "pins.h"
 #include "pid.h"
 
 PIDController pidcontroller;
 
-#define Kp 10
-#define Ki 0
-#define Kd 0
+uint8_t Kp 10;
+uint8_t Ki 0;
+uint8_t Kd 0;
+
+uint8_t min;
+uint8_t max;
 
 int main()
 {
 	sei();
 
 	initialise_motors();
-	// start_motors();
+	initialize_sensors();
 
 	PIDController_Init(&pidcontroller, Kp, Ki, Kd);
+	calibrateSensors(&min, &max);
+
+	// start_motors();
+	while (1)
+	{
+	}
 }
