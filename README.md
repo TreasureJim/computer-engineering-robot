@@ -43,3 +43,5 @@ Set Kp - `0x02 | value (4 bytes float)`
 Set Ki - `0x03 | value (4 bytes float)`
 
 Set Kd - `0x04 | value (4 bytes float)`
+
+Set Goal Position - `0x05` (unfinished)
