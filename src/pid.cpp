@@ -5,11 +5,13 @@
 /// @param Kp proportional constant
 /// @param Ki integrator constant
 /// @param Kd derivative constant
-void PIDController_Init(PIDController *pid, float Kp, float Ki, float Kd)
+void PIDController_Init(PIDController *pid, float Kp, float Ki, float Kd, float Hz)
 {
 	pid->Kp = Kp;
 	pid->Ki = Ki;
 	pid->Kd = Kd;
+
+	pid->Hz = Hz;
 
 	pid->integrator = 0.0f;
 	pid->prevError = 0.0f;
@@ -28,7 +30,7 @@ float PIDController_Compute(PIDController *pid, float goalvalue, float measureme
 	float proportional = pid->Kp * error;
 
 	// Integral
-	pid->integrator += pid->Ki * pid->timeBetweenSamples * error;
+	pid->integrator += pid->Ki / pid->Hz * error;
 
 	// Differential
 	float differential = pid->Kd * (error - pid->prevError);

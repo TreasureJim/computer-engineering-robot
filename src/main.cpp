@@ -7,17 +7,27 @@
 #include "motor.h"
 #include "pins.h"
 #include "pid.h"
+#include "bluetooth.h"
+
+// #include <FastPID.h>
 
 PIDController pidcontroller;
 
-uint8_t Kp 10;
-uint8_t Ki 0;
-uint8_t Kd 0;
+float Kp = 0.1f, Ki = 0.00f, Kd = 0.0f;
+float Hz = 10.0f;
+
+// #define OUTPUT_BITS 8
+// #define OUTPUT_SIGNED true
+
+// FastPID pid(Kp, Ki, Kd, Hz, OUTPUT_BITS, OUTPUT_SIGNED);
 
 uint8_t min;
 uint8_t max;
-#include <pins.h>
-#include "bluetooth.h"
+
+void SetError();
+void ClearError();
+void PID_Start();
+void PID_Stop();
 
 int main()
 {
@@ -25,10 +35,38 @@ int main()
 
 	initialise_motors();
 	initialise_bluetooth();
-	initialize_sensors();
-	PIDController_Init(&pidcontroller, Kp, Ki, Kd);
-	calibrateSensors(&min, &max);
+	IR_IntialiseSensor();
+	PIDController_Init(&pidcontroller, Kp, Ki, Kd, Hz);
+
+	// begin calibration
+	IR_CalibrateSensors(&min, &max);
+
+	// init PID timer
+	TCCR1B = 0b11 << WGM12 | 0b011 << CS10;
+	ICR1 = 25000;
+
+	// start motors
+	start_motors();
+	drive_motors(0.0f);
+
+	PID_Start();
 
 	while (1)
 		;
+}
+
+void PID_Start()
+{
+	TIMSK1 = 0b1 << ICIE1;
+}
+
+void PID_Stop()
+{
+	TIMSK1 &= ~(0b1 << ICIE1);
+}
+
+ISR(TIMER1_COMPA_vect)
+{
+	float output = PIDController_Compute(&pidcontroller, 0.5f, IR_GetScaledValue(min, max));
+	Bluetooth_SendBytes((uint8_t *)&output, sizeof(output));
 }

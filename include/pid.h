@@ -7,7 +7,7 @@ typedef struct
 	float Ki;
 	float Kd;
 
-	float timeBetweenSamples;
+	float Hz;
 
 	float integrator;
 	float prevError;
@@ -20,7 +20,7 @@ typedef struct
 
 } PIDController;
 
-void PIDController_Init(PIDController *pid, float Kp, float Ki, float Kd);
+void PIDController_Init(PIDController *pid, float Kp, float Ki, float Kd, float Hz);
 float PIDController_Compute(PIDController *pid, float goalvalue, float measurement);
 
 #endif
