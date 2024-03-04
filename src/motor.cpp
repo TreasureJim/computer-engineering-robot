@@ -31,6 +31,7 @@ void initialise_motors()
 }
 
 /// @brief Change the direction of the car by changing the PWM to the motors
+/// @param speed float between 0 and 1 which changes the overall speed
 /// @param direction float between -1 and 1 where -1 is completely left and 1 is completely right and 0 is straight
 void drive_motors(float speed, float direction)
 {
