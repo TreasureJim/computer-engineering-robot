@@ -31,18 +31,20 @@ void initialise_motors()
 }
 
 /// @brief Change the direction of the car by changing the PWM to the motors
+/// @param speed float between 0 and 1 which changes the overall speed
 /// @param direction float between -1 and 1 where -1 is completely left and 1 is completely right and 0 is straight
-void drive_motors(float direction)
+void drive_motors(float speed, float direction)
 {
+	// float speed_rel = (float)speed / 255.0f;
 	uint8_t turn_factor_right = (direction + 1.0f) * ((256 - MOTOR_MIN_PWM) / 2.0f);
 	uint8_t turn_factor_left = (256 - MOTOR_MIN_PWM) - turn_factor_right;
 
 	// left motor
-	OCR0A = MOTOR_MIN_PWM + turn_factor_right;
+	OCR0A = (MOTOR_MIN_PWM + turn_factor_right) * speed;
 	// OCR0A = 100;
 	// OCR0B = OCR0A;
 	// right motor
-	OCR0B = MOTOR_MIN_PWM + turn_factor_left;
+	OCR0B = (MOTOR_MIN_PWM + turn_factor_left) * speed;
 }
 
 /// @brief Starts output on motor pins
@@ -57,9 +59,10 @@ void cut_motors()
 	TCCR0A &= ~(0b11 << COM0A0 | 0b11 << COM0B0);
 }
 
-void motorCalibration() {
-	//left motor
-	OCR0A = 150; 
-	//right motor
+void motorCalibration()
+{
+	// left motor
+	OCR0A = 150;
+	// right motor
 	OCR0B = 0;
 }

@@ -5,7 +5,7 @@
 
 void initialise_motors();
 
-void drive_motors(float direction);
+void drive_motors(float speed, float direction);
 
 /// @brief Starts output on motor pins
 void start_motors();
