@@ -33,7 +33,7 @@ void send_bytes(uint8_t *data, uint8_t n)
 	tx_byte_count = 1;
 
 	// wait for empty transmission buffer
-	while (!(UCSRnA & (1 << RXCn)))
+	while (!(UCSR0A & (1 << RXC0)))
 		;
 	// start first transmission
 	UDR0 = tx_buffer[0];
@@ -50,6 +50,34 @@ uint8_t rx_buffer[4];
 // manages the index counter for rx_bytes
 uint8_t rx_byte_count = 0;
 uint8_t rx_byte_count_goal = 0;
+
+void set_Kp()
+{
+	float received;
+	memcpy(&received, rx_buffer, 4);
+	// TODO: Set Kp
+}
+
+void recieve_Kp()
+{
+	rx_byte_count_goal = 3;
+	finalise_command = &set_Kp;
+}
+
+void receive_command()
+{
+	rx_byte_count = 0;
+	rx_byte_count_goal = 0;
+
+	char command = UDR0;
+
+	switch (command)
+	{
+	case 0x02:
+		recieve_Kp();
+		break;
+	}
+}
 
 ISR(USART_RX_vect)
 {
@@ -70,32 +98,4 @@ ISR(USART_RX_vect)
 	{
 		(*finalise_command)();
 	}
-}
-
-void receive_command()
-{
-	rx_byte_count = 0;
-	rx_byte_count_goal = 0;
-
-	char command = UDR0;
-
-	switch (command)
-	{
-	case 0x02:
-		recieve_Kp();
-		break;
-	}
-}
-
-void recieve_Kp()
-{
-	rx_byte_count_goal = 3;
-	finalise_command = &set_Kp;
-}
-
-void set_Kp()
-{
-	float received;
-	memcpy(&received, rx_buffer, 4);
-	// TODO: Set Kp
 }
