@@ -20,5 +20,10 @@ int main()
 	uint8_t max;
 	calibrateSensors(&min, &max);
 	while (1)
-		;
+	{
+		for (float speed = 0.0f; speed < 1.0f; speed += 0.05f)
+		{
+			drive_motors(speed, 0.0f);
+		}
+	};
 }
