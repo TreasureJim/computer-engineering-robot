@@ -9,17 +9,10 @@
 #include "pid.h"
 #include "bluetooth.h"
 
-// #include <FastPID.h>
-
 PIDController pidcontroller;
 
 float Kp = 0.1f, Ki = 0.00f, Kd = 0.0f;
 float Hz = 10.0f;
-
-// #define OUTPUT_BITS 8
-// #define OUTPUT_SIGNED true
-
-// FastPID pid(Kp, Ki, Kd, Hz, OUTPUT_BITS, OUTPUT_SIGNED);
 
 uint8_t min;
 uint8_t max;
@@ -45,9 +38,8 @@ int main()
 	TCCR1B = 0b11 << WGM12 | 0b011 << CS10;
 	ICR1 = 25000;
 
-	// start motors
-	start_motors();
-	drive_motors(0.0f);
+	// start_motors();
+	// drive_motors(0.5f, 0.0f);
 
 	PID_Start();
 
