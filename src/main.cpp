@@ -1,4 +1,4 @@
-#include <avr/delay.h>
+#include <util/delay.h>
 #include <avr/interrupt.h>
 
 #include <Arduino.h>
@@ -12,13 +12,20 @@ int main()
 {
 	sei();
 
-	initialise_motors();
-	initialise_bluetooth();
+	// initialise_motors();
+	Bluetooth_Initialise();
 
-	initialize_sensors();
-	uint8_t min;
-	uint8_t max;
-	calibrateSensors(&min, &max);
+	// initialize_sensors();
+	// uint8_t min;
+	// uint8_t max;
+	// calibrateSensors(&min, &max);
+
+	DDRB = 0xff;
+
 	while (1)
-		;
+	{
+		_delay_ms(1000);
+		char c[] = "aaaaa\naaaaaa\n";
+		Bluetooth_Send(c, sizeof(c));
+	};
 }

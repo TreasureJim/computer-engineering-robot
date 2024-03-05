@@ -7,7 +7,7 @@
 
 #define TX_BUFFER_SIZE 4
 
-void initialise_bluetooth()
+void Bluetooth_Initialise()
 {
 	// Baud Rate
 	UBRR0L = UBRRL_VALUE;
@@ -22,27 +22,39 @@ uint8_t tx_buffer[TX_BUFFER_SIZE];
 uint8_t tx_byte_count = 0;
 uint8_t tx_byte_count_goal = 0;
 
-void send_bytes(uint8_t *data, uint8_t n)
+void Bluetooth_Send(void *data, uint8_t n)
 {
 	// disable receiving interrupt
-	// UCSR0B &= ~(0b1 << RXCIE0);
+	UCSR0B &= ~(0b1 << RXEN0);
 
 	memcpy(tx_buffer, data, n);
 
 	tx_byte_count_goal = n - 1;
 	tx_byte_count = 1;
 
-	// wait for empty transmission buffer
-	while (!(UCSR0A & (1 << RXC0)))
-		;
+	while (!(UCSR0A & (1 << UDRE0)))
+		; /* Wait for empty transmit buffer */
+
 	// start first transmission
 	UDR0 = tx_buffer[0];
 }
 
 ISR(USART_TX_vect)
 {
+	cli();
+	PORTB ^= 0xff;
+
+	// if sent enough bytes exit
+	if (tx_byte_count >= tx_byte_count_goal)
+	{
+		UCSR0B |= 0b1 << RXEN0;
+		return;
+	}
+
 	UDR0 = tx_buffer[tx_byte_count];
 	tx_byte_count++;
+
+	sei();
 }
 
 void (*finalise_command)() = nullptr;
@@ -69,15 +81,21 @@ void receive_command()
 	rx_byte_count = 0;
 	rx_byte_count_goal = 0;
 
-	char command = UDR0;
+	uint8_t command = UDR0;
+	PORTB ^= 0xff;
 
 	switch (command)
 	{
-	case 0x02:
-		recieve_Kp();
+	case 0xD8:
+		// PORTB ^= 0b1 << PORTB2;
+		char message[] = "this is a message\n";
+		Bluetooth_Send(message, sizeof(message));
+		// recieve_Kp();
 		break;
 	}
 }
+
+#include <util/delay.h>
 
 ISR(USART_RX_vect)
 {
@@ -87,7 +105,7 @@ ISR(USART_RX_vect)
 	}
 
 	// we are processing a command
-	if (rx_byte_count <= rx_byte_count_goal)
+	if (rx_byte_count < rx_byte_count_goal)
 	{
 		// receive a byte
 		rx_buffer[rx_byte_count] = UDR0;
