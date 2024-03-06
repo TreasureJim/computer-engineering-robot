@@ -42,7 +42,6 @@ void Bluetooth_Send(void *data, uint8_t n)
 ISR(USART_TX_vect)
 {
 	cli();
-	PORTB ^= 0xff;
 
 	// if sent enough bytes exit
 	if (tx_byte_count >= tx_byte_count_goal)
@@ -82,17 +81,13 @@ void receive_command()
 	rx_byte_count_goal = 0;
 
 	uint8_t command = UDR0;
-	PORTB ^= 0xff;
 
-	switch (command)
-	{
-	case 0xD8:
-		// PORTB ^= 0b1 << PORTB2;
-		char message[] = "this is a message\n";
-		Bluetooth_Send(message, sizeof(message));
-		// recieve_Kp();
-		break;
-	}
+	// switch (command)
+	// {
+	// case 0xD8:
+	// 	recieve_Kp();
+	// 	break;
+	// }
 }
 
 #include <util/delay.h>

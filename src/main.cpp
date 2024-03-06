@@ -12,20 +12,14 @@ int main()
 {
 	sei();
 
-	// initialise_motors();
+	initialise_motors();
 	Bluetooth_Initialise();
 
-	// initialize_sensors();
-	// uint8_t min;
-	// uint8_t max;
-	// calibrateSensors(&min, &max);
-
-	DDRB = 0xff;
+	initialize_sensors();
+	uint8_t min;
+	uint8_t max;
+	calibrateSensors(&min, &max);
 
 	while (1)
-	{
-		_delay_ms(1000);
-		char c[] = "aaaaa\naaaaaa\n";
-		Bluetooth_Send(c, sizeof(c));
-	};
+		;
 }
