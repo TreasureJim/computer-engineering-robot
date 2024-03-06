@@ -40,7 +40,7 @@ void IR_GetLimits(uint8_t *min, uint8_t *max)
 {
 	uint8_t localMin = 255;
 	uint8_t localMax = 0;
-	for (int i = 0; i <= 1000; i++)
+	for (int i = 0; i <= 500; i++)
 	{
 		uint8_t val = IR_GetAverageValue();
 		_delay_ms(10);

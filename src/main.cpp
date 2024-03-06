@@ -26,13 +26,18 @@ int main()
 {
 	sei();
 
+	// Error LED
+	DDRB |= 0b1 << PORTB2;
+
 	initialise_motors();
-	initialise_bluetooth();
+	Bluetooth_Initialise();
 	IR_IntialiseSensor();
 	PIDController_Init(&pidcontroller, Kp, Ki, Kd, Hz);
 
 	// begin calibration
+	SetError();
 	IR_CalibrateSensors(&min, &max);
+	ClearError();
 
 	// init PID timer
 	TCCR1B = 0b11 << WGM12 | 0b011 << CS10;
@@ -49,7 +54,7 @@ int main()
 
 void PID_Start()
 {
-	TIMSK1 = 0b1 << ICIE1;
+	TIMSK1 |= 0b1 << ICIE1;
 }
 
 void PID_Stop()
@@ -60,5 +65,15 @@ void PID_Stop()
 ISR(TIMER1_COMPA_vect)
 {
 	float output = PIDController_Compute(&pidcontroller, 0.5f, IR_GetScaledValue(min, max));
-	Bluetooth_SendBytes((uint8_t *)&output, sizeof(output));
+	Bluetooth_Send((uint8_t *)&output, sizeof(output));
+}
+
+void SetError()
+{
+	PORTB |= 0b1 << PORTB2;
+}
+
+void ClearError()
+{
+	PORTB &= ~(0b1 << PORTB2);
 }
