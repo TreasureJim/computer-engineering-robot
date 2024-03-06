@@ -36,12 +36,20 @@ void getLimits(uint8_t *min, uint8_t *max) {
     uint8_t localMin = 255;
     uint8_t localMax = 0;
     for(int i = 0; i <= 1000; i++) {
-        uint8_t val = getAverageValue();
+        // uint8_t val = getAverageValue();
+        uint8_t val1 = readSensor(leftSensor);
         _delay_ms(10);
-        if (val < localMin) {
+        if (val1 < localMin) {
+            localMin = val1;
+        } else if (val1 > localMax) {
+            localMax = val1;
+        }
+        uint8_t val2 = readSensor(rightSensor);
+        _delay_ms(10);
+        if (val2 < localMin) {
             localMin = val;
-        } else if (val > localMax) {
-            localMax = val;
+        } else if (val2 > localMax) {
+            localMax = val2;
         }
     }
     *min = localMin;

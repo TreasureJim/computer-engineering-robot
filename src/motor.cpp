@@ -59,10 +59,9 @@ void cut_motors()
 	TCCR0A &= ~(0b11 << COM0A0 | 0b11 << COM0B0);
 }
 
-void motorCalibration()
-{
-	// left motor
-	OCR0A = 150;
-	// right motor
+void motorCalibration() {
+	//left motor
+	OCR0A = 255; 
+	//right motor
 	OCR0B = 0;
 }
