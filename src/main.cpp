@@ -1,4 +1,4 @@
-#include <avr/delay.h>
+#include <util/delay.h>
 #include <avr/interrupt.h>
 
 #include <Arduino.h>

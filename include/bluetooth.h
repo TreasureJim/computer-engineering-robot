@@ -1,9 +1,9 @@
 #ifndef BLUETOOTH_H_
 #define BLUETOOTH_H_
 
-void initialise_bluetooth();
+void Bluetooth_Initialise();
 
-void Bluetooth_SendBytes(uint8_t *data, uint8_t n);
+void Bluetooth_Send(void *data, uint8_t n);
 
 typedef struct
 {
