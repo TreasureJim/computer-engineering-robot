@@ -7,11 +7,12 @@
 #include <stdlib.h>
 #include <Arduino.h>
 
-void initialize_sensors();
-uint8_t readSensor(uint8_t channel);
-uint8_t getAverageValue();
-void getLimits(uint8_t *min, uint8_t *max);
-void calibrateSensors(uint8_t *min, uint8_t *max);
-float getScaledValue(uint8_t *min, uint8_t *max);
+void IR_IntialiseSensor();
+void IR_CalibrateSensors(uint8_t *min, uint8_t *max);
+float IR_GetScaledValue(uint8_t min, uint8_t max);
+
+uint8_t IR_ReadSensor(uint8_t channel);
+uint8_t IR_GetAverageValue();
+void IR_GetLimits(uint8_t *min, uint8_t *max);
 
 #endif
