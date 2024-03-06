@@ -54,18 +54,18 @@ int main()
 
 void PID_Start()
 {
-	TIMSK1 |= 0b1 << ICIE1;
+	TIMSK1 |= 0b1 << OCIE1A;
 }
 
 void PID_Stop()
 {
-	TIMSK1 &= ~(0b1 << ICIE1);
+	TIMSK1 &= ~(0b1 << OCIE1A);
 }
 
 ISR(TIMER1_COMPA_vect)
 {
 	float output = PIDController_Compute(&pidcontroller, 0.5f, IR_GetScaledValue(min, max));
-	Bluetooth_Send((uint8_t *)&output, sizeof(output));
+	Bluetooth_Send(&output, sizeof(output));
 }
 
 void SetError()
