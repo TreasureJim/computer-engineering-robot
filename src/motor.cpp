@@ -59,7 +59,7 @@ void cut_motors()
 
 void motorCalibration() {
 	//left motor
-	OCR0A = 150; 
+	OCR0A = 255; 
 	//right motor
 	OCR0B = 0;
 }
