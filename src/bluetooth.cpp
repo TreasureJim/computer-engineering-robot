@@ -41,6 +41,15 @@ void send_bytes(uint8_t *data, uint8_t n)
 
 ISR(USART_TX_vect)
 {
+	cli();
+
+	// if sent enough bytes exit
+	if (tx_byte_count >= tx_byte_count_goal)
+	{
+		UCSR0B |= 0b1 << RXEN0;
+		return;
+	}
+
 	UDR0 = tx_buffer[tx_byte_count];
 	tx_byte_count++;
 }
@@ -69,6 +78,7 @@ void receive_command()
 	rx_byte_count = 0;
 	rx_byte_count_goal = 0;
 
+<<<<<<< HEAD
 	char command = UDR0;
 
 	switch (command)
@@ -77,6 +87,16 @@ void receive_command()
 		recieve_Kp();
 		break;
 	}
+=======
+	uint8_t command = UDR0;
+
+	// switch (command)
+	// {
+	// case 0xD8:
+	// 	recieve_Kp();
+	// 	break;
+	// }
+>>>>>>> bluetooth-fix
 }
 
 ISR(USART_RX_vect)
