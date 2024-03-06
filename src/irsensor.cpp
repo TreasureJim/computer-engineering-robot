@@ -36,7 +36,7 @@ uint8_t IR_ReadSensor(uint8_t channel)
 /// passed as parameters will be set outside this function.
 /// @param min pointer to the min variable
 /// @param max pointer to the max variable
-void getLimits(uint8_t *min, uint8_t *max)
+void IR_GetLimits(uint8_t *min, uint8_t *max)
 {
 	uint8_t localMin = 255;
 	uint8_t localMax = 0;

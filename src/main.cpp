@@ -30,12 +30,24 @@ int main()
 	DDRB |= 0b1 << PORTB2;
 
 	initialise_motors();
-	initialise_bluetooth();
+	Bluetooth_Initialise();
+	IR_IntialiseSensor();
+	PIDController_Init(&pidcontroller, Kp, Ki, Kd, Hz);
 
-	initialize_sensors();
-	uint8_t min;
-	uint8_t max;
-	calibrateSensors(&min, &max);
+	// begin calibration
+	SetError();
+	IR_CalibrateSensors(&min, &max);
+	ClearError();
+
+	// init PID timer
+	TCCR1B = 0b11 << WGM12 | 0b011 << CS10;
+	ICR1 = 25000;
+
+	// start_motors();
+	// drive_motors(0.5f, 0.0f);
+
+	PID_Start();
+
 	while (1)
 		;
 }
