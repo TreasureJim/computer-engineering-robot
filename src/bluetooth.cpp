@@ -1,6 +1,7 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <string.h>
+#include <stdio.h>
 #include "bluetooth.h"
 #define BAUD 9600
 #include <util/setbaud.h>
@@ -22,7 +23,7 @@ uint8_t tx_buffer[TX_BUFFER_SIZE];
 uint8_t tx_byte_count = 0;
 uint8_t tx_byte_count_goal = 0;
 
-void Bluetooth_Send(uint8_t *data, uint8_t n)
+void Bluetooth_Send(void *data, uint8_t n)
 {
 	// disable receiving interrupt
 	UCSR0B &= ~(0b1 << RXEN0);
@@ -36,6 +37,22 @@ void Bluetooth_Send(uint8_t *data, uint8_t n)
 
 	// start first transmission
 	UDR0 = tx_buffer[0];
+}
+
+void Bluetooth_SendIntValues(void *data, uint8_t n)
+{
+	unsigned int number = *(uint8_t*)data;
+	char string[4];
+	sprintf(string, "%u", number);
+	Bluetooth_Send(&string, sizeof(string));
+}
+
+void Bluetooth_SendFloatValues(void *data, uint8_t n)
+{
+	float number = *(float*)data;
+	char string[4];
+	sprintf(string, "%.2f", number);
+	Bluetooth_Send(&string, sizeof(string));
 }
 
 ISR(USART_TX_vect)
