@@ -7,7 +7,7 @@
 #include <stdlib.h>
 #include <Arduino.h>
 
-void IR_IntialiseSensor();
+void IR_InitialiseSensor();
 void IR_CalibrateSensors(uint8_t *min, uint8_t *max);
 float IR_GetScaledValue(uint8_t min, uint8_t max);
 
