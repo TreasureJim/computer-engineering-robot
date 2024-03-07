@@ -3,7 +3,7 @@
 
 void Bluetooth_Initialise();
 
-void Bluetooth_Send(uint8_t *data, uint8_t n);
+void Bluetooth_Send(void *data, uint8_t n);
 
 typedef struct
 {
