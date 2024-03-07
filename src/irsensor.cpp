@@ -2,7 +2,7 @@
 #include "pins.h"
 #include "motor.h"
 /// @brief Sensor initialization for the DDR and ADC.
-void IR_IntialiseSensor()
+void IR_InitialiseSensor()
 {
 	// Set the DDR as input for port C (analog pins)
 	DDRC |= (0 << rightMidSensor) | (0 << leftMidSensor) | (0 << midMidSensor) | (0 << leftSensor) | (0 << rightSensor);
@@ -42,15 +42,25 @@ void IR_GetLimits(uint8_t *min, uint8_t *max)
 	uint8_t localMax = 0;
 	for (int i = 0; i <= 500; i++)
 	{
-		uint8_t val = IR_GetAverageValue();
+		uint8_t val1 = IR_ReadSensor(leftSensor);
 		_delay_ms(10);
-		if (val < localMin)
+		if (val1 < localMin)
 		{
-			localMin = val;
+			localMin = val1;
 		}
-		else if (val > localMax)
+		else if (val1 > localMax)
 		{
-			localMax = val;
+			localMax = val1;
+		}
+		uint8_t val2 = IR_ReadSensor(rightSensor);
+		_delay_ms(10);
+		if (val2 < localMin)
+		{
+			localMin = val2;
+		}
+		else if (val2 > localMax)
+		{
+			localMax = val2;
 		}
 	}
 	*min = localMin;
@@ -58,7 +68,7 @@ void IR_GetLimits(uint8_t *min, uint8_t *max)
 }
 
 ///@brief Calculates the average value of the readings of the IR sensors
-///@return Average value of all sensors
+///@return Average value of sensors
 uint8_t IR_GetAverageValue()
 {
 	// uint8_t v1 = readSensor(rightMidSensor);
