@@ -65,7 +65,9 @@ void PID_Stop()
 ISR(TIMER1_COMPA_vect)
 {
 	float output = PIDController_Compute(&pidcontroller, 0.5f, IR_GetScaledValue(min, max));
-	Bluetooth_Send(&output, sizeof(output));
+	char msg[] = "PID: xxxxxxx";
+	sprintf(msg, "PID: %f", output);
+	Bluetooth_Send(msg, sizeof(msg));
 }
 
 void SetError()
