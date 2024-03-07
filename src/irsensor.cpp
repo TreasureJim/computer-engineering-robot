@@ -96,13 +96,13 @@ float IR_GetScaledValue(uint8_t *min, uint8_t *max)
 /// @param max max value of sensors
 void IR_CalibrateSensors(uint8_t *min, uint8_t *max)
 {
-	// start_motors();
-	// _delay_ms(1000);
-	// motorCalibration();
+	start_motors();
+	_delay_ms(1000);
+	motorCalibration();
 	uint8_t localMin;
 	uint8_t localMax;
 	IR_GetLimits(&localMin, &localMax);
 	*min = localMin;
 	*max = localMax;
-	// cut_motors();
+	cut_motors();
 }
