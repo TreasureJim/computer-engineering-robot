@@ -47,7 +47,7 @@ int main()
 	// PID_Start();
 
 	while (1) {
-		float scaledVal = IR_GetScaledValue(min, max);
+		float scaledVal = IR_GetScaledValue(&min, &max);
 		Bluetooth_SendFloatValues(&scaledVal, sizeof(scaledVal));
 		_delay_ms(100);
 	}

@@ -6,7 +6,7 @@
 #define BAUD 9600
 #include <util/setbaud.h>
 
-#define TX_BUFFER_SIZE 4
+#define TX_BUFFER_SIZE 20
 
 void Bluetooth_Initialise()
 {
@@ -42,7 +42,7 @@ void Bluetooth_Send(void *data, uint8_t n)
 void Bluetooth_SendIntValues(void *data, uint8_t n)
 {
 	unsigned int number = *(uint8_t*)data;
-	char string[4];
+	char string[10];
 	sprintf(string, "%u", number);
 	Bluetooth_Send(&string, sizeof(string));
 }
@@ -50,7 +50,7 @@ void Bluetooth_SendIntValues(void *data, uint8_t n)
 void Bluetooth_SendFloatValues(void *data, uint8_t n)
 {
 	float number = *(float*)data;
-	char string[4];
+	char string[10];
 	sprintf(string, "%.2f", number);
 	Bluetooth_Send(&string, sizeof(string));
 }

@@ -9,7 +9,7 @@
 
 void IR_InitialiseSensor();
 void IR_CalibrateSensors(uint8_t *min, uint8_t *max);
-float IR_GetScaledValue(uint8_t min, uint8_t max);
+float IR_GetScaledValue(uint8_t *min, uint8_t *max);
 
 uint8_t IR_ReadSensor(uint8_t channel);
 uint8_t IR_GetAverageValue();
