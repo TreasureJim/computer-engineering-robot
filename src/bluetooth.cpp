@@ -92,11 +92,14 @@ void receive_command()
 	switch (command)
 	{
 	case 0x02:
-		receive_Kp();
+		Receive_Kp();
 		break;
-	case 0x03:
-		break;
-	case 0x04:
+		// case 0x03:
+		// 	break;
+		// case 0x04:
+		// 	break;
+	case 0x06:
+		Receive_IRCalibration();
 		break;
 	}
 }

@@ -54,3 +54,5 @@ Set Ki - `0x03 | value (4 bytes float)`
 Set Kd - `0x04 | value (4 bytes float)`
 
 Set Goal Position - `0x05` (unfinished)
+
+Set IR Calibration - `0x06 | min (1 byte) | max (1 byte)`
