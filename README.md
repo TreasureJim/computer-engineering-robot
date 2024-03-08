@@ -14,13 +14,22 @@
 
 [`irsensor.h`](include/irsensor.h) - initialization and functionality of IR sensors
 
+[`pid.h`](include/pid.h) - initialization of pid controller
+
+[`helpers.h`](include/helpers.h) - helper functions
+
+[`bluetooth.h`](include/bluetooth.h) - initialization of bluetooth module and its functionality
+
+[`bluetooth_commands.h`](include/bluetooth_commands.h) - command functions for the bluetooth module
+
+
 # Timers
 
 Timer 0 - left & right motor
 
 Timer 1 - PID
 
-Timer 2 - Unused
+Timer 2 - Ultrasonic Sensor
 
 # Interrupts
 
