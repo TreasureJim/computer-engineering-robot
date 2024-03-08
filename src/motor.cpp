@@ -9,7 +9,7 @@
 #define MOTOR_R_BASE_SPEED 100
 
 #define TIMER_TOP 0xFF
-#define MOTOR_MIN_PWM 150
+#define MOTOR_MIN_PWM 200
 
 /// @brief Initialise motor and timer registers
 void initialise_motors()
@@ -36,15 +36,15 @@ void initialise_motors()
 void drive_motors(float speed, float direction)
 {
 	// float speed_rel = (float)speed / 255.0f;
-	uint8_t turn_factor_right = (direction + 1.0f) * ((256 - MOTOR_MIN_PWM) / 2.0f);
-	uint8_t turn_factor_left = (256 - MOTOR_MIN_PWM) - turn_factor_right;
-
+	uint8_t turn_factor_right = (direction + 1.0f) * ((255 - MOTOR_MIN_PWM) / 2.0f);
+	uint8_t turn_factor_left = (255 - MOTOR_MIN_PWM) - turn_factor_right;
+	
 	// left motor
-	OCR0A = (MOTOR_MIN_PWM + turn_factor_right) * speed;
+	OCR0A = (MOTOR_MIN_PWM + turn_factor_left) * speed;
 	// OCR0A = 100;
 	// OCR0B = OCR0A;
 	// right motor
-	OCR0B = (MOTOR_MIN_PWM + turn_factor_left) * speed;
+	OCR0B = (MOTOR_MIN_PWM + turn_factor_right) * speed;
 }
 
 /// @brief Starts output on motor pins

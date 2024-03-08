@@ -47,7 +47,7 @@ void IR_GetLimits(uint8_t *min, uint8_t *max)
 	uint8_t localMax = 0;
 	for (int i = 0; i <= 500; i++)
 	{
-		uint8_t val1 = IR_ReadSensor(leftSensor);
+		uint8_t val1 = IR_ReadSensor(midMidSensor);
 		_delay_ms(10);
 		if (val1 < localMin)
 		{
@@ -57,16 +57,16 @@ void IR_GetLimits(uint8_t *min, uint8_t *max)
 		{
 			localMax = val1;
 		}
-		uint8_t val2 = IR_ReadSensor(rightSensor);
-		_delay_ms(10);
-		if (val2 < localMin)
-		{
-			localMin = val2;
-		}
-		else if (val2 > localMax)
-		{
-			localMax = val2;
-		}
+		// uint8_t val2 = IR_ReadSensor(rightSensor);
+		// _delay_ms(10);
+		// if (val2 < localMin)
+		// {
+		// 	localMin = val2;
+		// }
+		// else if (val2 > localMax)
+		// {
+		// 	localMax = val2;
+		// }
 	}
 	*min = localMin;
 	*max = localMax;
@@ -76,12 +76,12 @@ void IR_GetLimits(uint8_t *min, uint8_t *max)
 ///@return Average value of sensors
 uint8_t IR_GetAverageValue()
 {
-	// uint8_t v1 = readSensor(rightMidSensor);
-	// uint8_t v2 = readSensor(leftMidSensor);
-	// uint8_t v3 = readSensor(midMidSensor);
-	uint8_t v4 = IR_ReadSensor(leftSensor);
-	uint8_t v5 = IR_ReadSensor(rightSensor);
-	return ((v4 + v5) / 2);
+	uint8_t v1 = IR_ReadSensor(rightMidSensor);
+	uint8_t v2 = IR_ReadSensor(leftMidSensor);
+	uint8_t v3 = IR_ReadSensor(midMidSensor);
+	// uint8_t v4 = IR_ReadSensor(leftSensor);
+	// uint8_t v5 = IR_ReadSensor(rightSensor);
+	return ((v1 + v2 + v3) / 3);
 }
 
 /// @brief Calculates a scaled value of the average value of all sensors.
@@ -90,10 +90,10 @@ uint8_t IR_GetAverageValue()
 /// @param min min value of the average
 /// @param max max value of the average
 /// @return A float between 0 and 1 based on the given min and max values.
-float IR_GetScaledValue(uint8_t min, uint8_t max)
+float IR_GetScaledValue(uint8_t *min, uint8_t *max)
 {
 	uint8_t avg = IR_GetAverageValue();
-	return ((float)(avg - min) / (float)(max - min));
+	return ((float)(avg - *min) / (float)(*max - *min));
 }
 
 /// @brief Calibrates the sensors to find mimimum and maximum value
@@ -101,13 +101,13 @@ float IR_GetScaledValue(uint8_t min, uint8_t max)
 /// @param max max value of sensors
 void IR_CalibrateSensors(uint8_t *min, uint8_t *max)
 {
-	// start_motors();
-	// _delay_ms(1000);
-	// motorCalibration();
+	start_motors();
+	_delay_ms(1000);
+	motorCalibration();
 	uint8_t localMin;
 	uint8_t localMax;
 	IR_GetLimits(&localMin, &localMax);
 	*min = localMin;
 	*max = localMax;
-	// cut_motors();
+	cut_motors();
 }

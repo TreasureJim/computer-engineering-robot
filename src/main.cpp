@@ -21,8 +21,8 @@ int main()
 {
 	sei();
 
-	// // Error LED
-	// DDRB |= 0b1 << PORTB2;
+	// Error LED
+	DDRB |= 0b1 << PORTB2;
 
 	initialise_motors();
 	Bluetooth_Initialise();
