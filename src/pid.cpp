@@ -37,3 +37,19 @@ float PIDController_Compute(PIDController *pid, float goalvalue, float measureme
 
 	return proportional + pid->integrator - differential;
 }
+/// @brief Enables the Interrupt on Channel A
+void PID_Start()
+{
+	TIMSK1 |= 0b1 << OCIE1A;
+}
+/// @brief Disables the Interrupt on Channel A
+void PID_Stop()
+{
+	TIMSK1 &= ~(0b1 << OCIE1A);
+}
+
+/// @brief Timer1 Initialization for the PID controller
+void PID_Timer_Init() {
+	TCCR1B = 0b11 << WGM12 | 0b100 << CS10;
+	ICR1 = 15625;
+}

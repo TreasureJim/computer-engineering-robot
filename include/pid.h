@@ -1,6 +1,7 @@
 #ifndef PID_H_
 #define PID_H_
 
+#include <avr/io.h>
 typedef struct
 {
 	float Kp;
@@ -22,5 +23,7 @@ typedef struct
 
 void PIDController_Init(PIDController *pid, float Kp, float Ki, float Kd, float Hz);
 float PIDController_Compute(PIDController *pid, float goalvalue, float measurement);
+void PID_Start();
+void PID_Stop();
 
 #endif
