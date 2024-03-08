@@ -14,13 +14,22 @@
 
 [`irsensor.h`](include/irsensor.h) - initialization and functionality of IR sensors
 
+[`pid.h`](include/pid.h) - initialization of pid controller
+
+[`helpers.h`](include/helpers.h) - helper functions
+
+[`bluetooth.h`](include/bluetooth.h) - initialization of bluetooth module and its functionality
+
+[`bluetooth_commands.h`](include/bluetooth_commands.h) - command functions for the bluetooth module
+
+
 # Timers
 
 Timer 0 - left & right motor
 
 Timer 1 - PID
 
-Timer 2 - Unused
+Timer 2 - Ultrasonic Sensor
 
 # Interrupts
 
@@ -45,3 +54,5 @@ Set Ki - `0x03 | value (4 bytes float)`
 Set Kd - `0x04 | value (4 bytes float)`
 
 Set Goal Position - `0x05` (unfinished)
+
+Set IR Calibration - `0x06 | min (1 byte) | max (1 byte)`

@@ -1,11 +1,10 @@
 #ifndef IRSENSOR_H_
 #define IRSENSOR_H_
 
-#include <stdio.h>
-#include <util/delay.h>
-#include <avr/io.h>
-#include <stdlib.h>
-#include <Arduino.h>
+#include <inttypes.h>
+
+extern uint8_t IR_min;
+extern uint8_t IR_max;
 
 void IR_InitialiseSensor();
 void IR_CalibrateSensors(uint8_t *min, uint8_t *max);

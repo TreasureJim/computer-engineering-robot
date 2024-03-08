@@ -5,8 +5,10 @@
 #include "bluetooth.h"
 #define BAUD 9600
 #include <util/setbaud.h>
+#include "helpers.h"
 
-#define TX_BUFFER_SIZE 4
+#define RX_BUFFER_SIZE 10
+#define TX_BUFFER_SIZE 20
 
 void Bluetooth_Initialise()
 {
@@ -41,7 +43,7 @@ void Bluetooth_Send(void *data, uint8_t n)
 
 void Bluetooth_SendIntValues(void *data, uint8_t n)
 {
-	unsigned int number = *(uint8_t*)data;
+	unsigned int number = *(uint8_t *)data;
 	char string[4];
 	sprintf(string, "%u", number);
 	Bluetooth_Send(&string, sizeof(string));
@@ -49,9 +51,9 @@ void Bluetooth_SendIntValues(void *data, uint8_t n)
 
 void Bluetooth_SendFloatValues(void *data, uint8_t n)
 {
-	float number = *(float*)data;
+	float number = *(float *)data;
 	char string[4];
-	sprintf(string, "%.2f", number);
+	sprintf(string, "%.2f", (double)number);
 	Bluetooth_Send(&string, sizeof(string));
 }
 
@@ -72,41 +74,35 @@ ISR(USART_TX_vect)
 	sei();
 }
 
-void (*finalise_command)() = nullptr;
-uint8_t rx_buffer[4];
+#include "bluetooth_commands.h"
+
+void (*finalise_command)() = NULL;
+uint8_t rx_buffer[RX_BUFFER_SIZE];
 // manages the index counter for rx_bytes
 uint8_t rx_byte_count = 0;
-uint8_t rx_byte_count_goal = 0;
-
-void set_Kp()
-{
-	float received;
-	memcpy(&received, rx_buffer, 4);
-	// TODO: Set Kp
-}
-
-void recieve_Kp()
-{
-	rx_byte_count_goal = 3;
-	finalise_command = &set_Kp;
-}
+uint8_t rx_num_bytes_goal = 0;
 
 void receive_command()
 {
 	rx_byte_count = 0;
-	rx_byte_count_goal = 0;
+	rx_num_bytes_goal = 0;
 
 	uint8_t command = UDR0;
 
-	// switch (command)
-	// {
-	// case 0xD8:
-	// 	recieve_Kp();
-	// 	break;
-	// }
+	switch (command)
+	{
+	case 0x02:
+		Receive_Kp();
+		break;
+		// case 0x03:
+		// 	break;
+		// case 0x04:
+		// 	break;
+	case 0x06:
+		Receive_IRCalibration();
+		break;
+	}
 }
-
-#include <util/delay.h>
 
 ISR(USART_RX_vect)
 {
@@ -116,8 +112,9 @@ ISR(USART_RX_vect)
 	}
 
 	// we are processing a command
-	if (rx_byte_count < rx_byte_count_goal)
+	if (rx_byte_count < rx_num_bytes_goal)
 	{
+		PORTB ^= 0b1 << PORTB2;
 		// receive a byte
 		rx_buffer[rx_byte_count] = UDR0;
 		rx_byte_count++;
