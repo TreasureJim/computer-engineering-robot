@@ -11,9 +11,6 @@ PIDController pidcontroller;
 float Kp = 1.0f, Ki = 0.00f, Kd = 0.0f;
 float Hz = 10.0f;
 
-uint8_t min;
-uint8_t max;
-
 void SetError();
 void ClearError();
 void PID_Start();
@@ -32,12 +29,12 @@ int main()
 	PIDController_Init(&pidcontroller, Kp, Ki, Kd, Hz);
 
 	// SetError();
-	// IR_GetLimits(&min, &max);
+	IR_GetLimits(&IR_min, &IR_max);
 	// ClearError();
 
-	char msg[] = "min xxx max xxx";
-	sprintf(msg, "min %u max %u", min, max);
-	Bluetooth_Send(msg, sizeof(msg));
+	char msg[] = "min xxx max xxx\n";
+	uint8_t msg_size = sprintf(msg, "min %u max %u\n", IR_min, IR_max);
+	Bluetooth_Send(msg, msg_size + 1);
 
 	// init PID timer
 	TCCR1B = 0b11 << WGM12 | 0b100 << CS10;
