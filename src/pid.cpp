@@ -37,3 +37,13 @@ float PIDController_Compute(PIDController *pid, float goalvalue, float measureme
 
 	return proportional + pid->integrator - differential;
 }
+
+void PID_Start()
+{
+	TIMSK1 |= 0b1 << OCIE1A;
+}
+
+void PID_Stop()
+{
+	TIMSK1 &= ~(0b1 << OCIE1A);
+}

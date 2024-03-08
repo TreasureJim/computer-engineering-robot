@@ -12,11 +12,6 @@ PIDController pidcontroller;
 float Kp = 1.0f, Ki = 0.00f, Kd = 0.0f;
 float Hz = 10.0f;
 
-void SetError();
-void ClearError();
-void PID_Start();
-void PID_Stop();
-
 int main()
 {
 	sei();
@@ -49,16 +44,6 @@ int main()
 		;
 
 	return 0;
-}
-
-void PID_Start()
-{
-	TIMSK1 |= 0b1 << OCIE1A;
-}
-
-void PID_Stop()
-{
-	TIMSK1 &= ~(0b1 << OCIE1A);
 }
 
 RunningDiagnostics diagnostics;
