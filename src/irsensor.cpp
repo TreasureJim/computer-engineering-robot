@@ -1,6 +1,11 @@
 #include "irsensor.h"
 #include "pins.h"
 #include "motor.h"
+#include <util/delay.h>
+
+uint8_t IR_min;
+uint8_t IR_max;
+
 /// @brief Sensor initialization for the DDR and ADC.
 void IR_InitialiseSensor()
 {

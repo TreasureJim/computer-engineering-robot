@@ -1,19 +1,16 @@
 #include <util/delay.h>
 #include <avr/interrupt.h>
-#include <Arduino.h>
 #include "irsensor.h"
 #include "motor.h"
 #include "pins.h"
 #include "pid.h"
 #include "bluetooth.h"
+#include <stdio.h>
 
 PIDController pidcontroller;
 
-float Kp = 2.0f, Ki = 0.00f, Kd = 0.0f;
+float Kp = 1.0f, Ki = 0.00f, Kd = 0.0f;
 float Hz = 10.0f;
-float output;
-uint8_t min;
-uint8_t max;
 
 void SetError();
 void ClearError();
@@ -31,41 +28,26 @@ int main()
 	Bluetooth_Initialise();
 	IR_InitialiseSensor();
 	PIDController_Init(&pidcontroller, Kp, Ki, Kd, Hz);
-	
-	start_motors();
 
-	SetError();
-	drive_motors(0.7, 0.5);
-	_delay_ms(2000);
+	// SetError();
+	IR_GetLimits(&IR_min, &IR_max);
+	// ClearError();
 
-	ClearError();
-	drive_motors(0.8, 0.5);
-	_delay_ms(2000);
-
-	SetError();
-	drive_motors(0.9f, 0.5);
-	_delay_ms(2000);
-
-	cut_motors();
-	return; 
-	// begin calibration
-	SetError();
-	IR_CalibrateSensors(&min, &max);
-	char msg[] = "finished calibrating\n";
-	Bluetooth_Send(msg, sizeof(msg));
-	ClearError();
+	char msg[] = "min xxx max xxx\n";
+	uint8_t msg_size = sprintf(msg, "min %u max %u\n", IR_min, IR_max);
+	Bluetooth_Send(msg, msg_size + 1);
 
 	// init PID timer
 	TCCR1B = 0b11 << WGM12 | 0b100 << CS10;
 	ICR1 = 15625;
 
-	// // start_motors();
-	// // drive_motors(0.5f, 0.0f);
+	// start_motors();
+	// drive_motors(0.5f, 0.0f);
 	PID_Start();
-	start_motors();
-	while (1) {
-		// float scaledVal = IR_GetScaledValue(&min, &max);/
-	}
+
+	while (1)
+		;
+
 	return 0;
 }
 
@@ -79,20 +61,11 @@ void PID_Stop()
 	TIMSK1 &= ~(0b1 << OCIE1A);
 }
 
+RunningDiagnostics diagnostics;
 ISR(TIMER1_COMPA_vect)
 {
-	output = PIDController_Compute(&pidcontroller, 0.5f, IR_GetScaledValue(&min, &max));
+	diagnostics.IR = IR_GetScaledValue(IR_min, IR_max);
+	diagnostics.PID = PIDController_Compute(&pidcontroller, 0.5f, diagnostics.IR);
 
-	Bluetooth_SendFloatValues(&output, sizeof(output));
-	drive_motors(0.5, output);
-}
-
-void SetError()
-{
-	PORTB |= 0b1 << PORTB2;
-}
-
-void ClearError()
-{
-	PORTB &= ~(0b1 << PORTB2);
+	// Bluetooth_Send(&diagnostics, sizeof(diagnostics));
 }
