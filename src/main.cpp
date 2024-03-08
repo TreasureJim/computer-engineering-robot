@@ -5,6 +5,7 @@
 #include "pins.h"
 #include "pid.h"
 #include "bluetooth.h"
+#include <stdio.h>
 
 PIDController pidcontroller;
 
@@ -63,7 +64,7 @@ void PID_Stop()
 RunningDiagnostics diagnostics;
 ISR(TIMER1_COMPA_vect)
 {
-	diagnostics.IR = IR_GetScaledValue(min, max);
+	diagnostics.IR = IR_GetScaledValue(IR_min, IR_max);
 	diagnostics.PID = PIDController_Compute(&pidcontroller, 0.5f, diagnostics.IR);
 
 	// Bluetooth_Send(&diagnostics, sizeof(diagnostics));

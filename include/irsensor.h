@@ -1,6 +1,8 @@
 #ifndef IRSENSOR_H_
 #define IRSENSOR_H_
 
+#include <inttypes.h>
+
 extern uint8_t IR_min;
 extern uint8_t IR_max;
 
