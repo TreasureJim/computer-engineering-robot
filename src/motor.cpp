@@ -79,8 +79,8 @@ void test(float speed, float direction) {
 	float pwmSpeed = speed * 255;
 
 	//for the direction, it should be between -1 and 1 for the different sides
-	uint8_t leftTurnFactor = ((direction + 1) * (pwmSpeed + pwmSpeed) ) / 2;
-	uint8_t rightTurnFactor = ((direction - 1) * (pwmSpeed + pwmSpeed)) / 2;
+	uint8_t leftTurnFactor = ((direction + 1) * (pwmSpeed) ) / 2;
+	uint8_t rightTurnFactor = ((direction - 1) * (pwmSpeed)) / 2;
 	uint8_t leftMotorPWM = (uint8_t)abs((int)leftTurnFactor);
 	uint8_t rightMotorPWM = (uint8_t)abs((int)rightTurnFactor);
 
