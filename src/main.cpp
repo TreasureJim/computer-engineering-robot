@@ -20,6 +20,8 @@ int main()
 	sei();
 	initialise_motors();
 	Initialize_UltrasonicSensor();
+	start_motors();
+	drive_motors(0.5f, 0.0f);
 	while (1) {
 		// Acceptance test for the sensor required.
 		// This code will be used for the acceptance test.

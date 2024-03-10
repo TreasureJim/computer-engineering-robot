@@ -60,30 +60,8 @@ void cut_motors()
 }
 
 void motorCalibration() {
-	//left motor
-	OCR0A = 255; 
 	//right motor
+	OCR0A = 255; 
+	//left motor
 	OCR0B = 0;
-}
-
-
-/// @brief This is a test function for driving the motor
-/// This calculation is more consistent with the values expected
-/// for the motors.
-/// UNDER REVIEW!!!
-/// @param speed float between 0 and 1 to set the speed of the motors
-/// @param direction float between -1 and 1 to set the direction of the car.
-/// -1 means the car should turn completely left and 1 means completely right, and 0 means straight
-void test(float speed, float direction) {
-	// for the speed, this means that this value should be the max set on any of the wheels
-	float pwmSpeed = speed * 255;
-
-	//for the direction, it should be between -1 and 1 for the different sides
-	uint8_t leftTurnFactor = ((direction + 1) * (pwmSpeed) ) / 2;
-	uint8_t rightTurnFactor = ((direction - 1) * (pwmSpeed)) / 2;
-	uint8_t leftMotorPWM = (uint8_t)abs((int)leftTurnFactor);
-	uint8_t rightMotorPWM = (uint8_t)abs((int)rightTurnFactor);
-
-	OCR0A = rightMotorPWM;
-	OCR0B = leftMotorPWM;
 }
