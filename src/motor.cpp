@@ -1,7 +1,7 @@
-#include <Arduino.h>
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <stdint.h>
+#include <stdlib.h>
 
 #include "pins.h"
 
@@ -60,8 +60,8 @@ void cut_motors()
 }
 
 void motorCalibration() {
-	//left motor
-	OCR0A = 255; 
 	//right motor
+	OCR0A = 255; 
+	//left motor
 	OCR0B = 0;
 }
