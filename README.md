@@ -29,7 +29,7 @@ Timer 0 - left & right motor
 
 Timer 1 - PID
 
-Timer 2 - Ultrasonic Sensor
+Timer 2 - Unused
 
 # Interrupts
 
