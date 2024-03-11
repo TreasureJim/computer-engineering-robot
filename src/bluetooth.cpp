@@ -87,21 +87,21 @@ void receive_command()
 	rx_byte_count = 0;
 	rx_num_bytes_goal = 0;
 
-	uint8_t command = UDR0;
+	// uint8_t command = UDR0;
 
-	switch (command)
-	{
-	case 0x02:
-		Receive_Kp();
-		break;
-		// case 0x03:
-		// 	break;
-		// case 0x04:
-		// 	break;
-	case 0x06:
-		Receive_IRCalibration();
-		break;
-	}
+	// switch (command)
+	// {
+	// case 0x02:
+	// 	Receive_Kp();
+	// 	break;
+	// 	// case 0x03:
+	// 	// 	break;
+	// 	// case 0x04:
+	// 	// 	break;
+	// case 0x06:
+	// 	Receive_IRCalibration();
+	// 	break;
+	// }
 }
 
 ISR(USART_RX_vect)
