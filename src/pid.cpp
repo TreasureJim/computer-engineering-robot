@@ -1,4 +1,5 @@
 #include "pid.h"
+#include "helpers.h"
 
 /// @brief Initialises the PID Controller
 /// @param pid pointer to PIDController struct
@@ -35,7 +36,20 @@ float PIDController_Compute(PIDController *pid, float goalvalue, float measureme
 	// Differential
 	float differential = pid->Kd * (error - pid->prevError);
 
-	return proportional + pid->integrator - differential;
+	float output = proportional + pid->integrator - differential;
+	if (output < -1.0f)
+	{
+		SetError();
+		return -1.0f;
+	}
+	if (output > 1.0f)
+	{
+		SetError();
+		return 1.0f;
+	}
+
+	ClearError();
+	return output;
 }
 /// @brief Enables the Interrupt on Channel A
 void PID_Start()
@@ -51,7 +65,8 @@ void PID_Stop()
 /// @brief Timer1 Initialization for the PID controller
 void PID_Timer_Init()
 {
-	TCCR1B = 0b11 << WGM12 | 0b100 << CS10;
+	// TCCR1B = 0b11 << WGM12 | 0b100 << CS10;
 	// ICR1 = 15625;
-	ICR1 = 60000;
+	TCCR1B = 0b11 << WGM12 | 0b011 << CS10;
+	ICR1 = 25000;
 }
