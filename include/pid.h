@@ -23,6 +23,7 @@ typedef struct
 
 void PIDController_Init(PIDController *pid, float Kp, float Ki, float Kd, float Hz);
 float PIDController_Compute(PIDController *pid, float goalvalue, float measurement);
+void PID_Timer_Init();
 void PID_Start();
 void PID_Stop();
 

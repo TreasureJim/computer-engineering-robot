@@ -49,7 +49,9 @@ void PID_Stop()
 }
 
 /// @brief Timer1 Initialization for the PID controller
-void PID_Timer_Init() {
+void PID_Timer_Init()
+{
 	TCCR1B = 0b11 << WGM12 | 0b100 << CS10;
-	ICR1 = 15625;
+	// ICR1 = 15625;
+	ICR1 = 60000;
 }

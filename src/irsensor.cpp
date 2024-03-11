@@ -48,7 +48,7 @@ void IR_GetLimits(uint8_t *min, uint8_t *max)
 	for (int i = 0; i <= 500; i++)
 	{
 		uint8_t val1 = IR_ReadSensor(midMidSensor);
-		_delay_ms(10);
+		_delay_ms(5);
 		if (val1 < localMin)
 		{
 			localMin = val1;
