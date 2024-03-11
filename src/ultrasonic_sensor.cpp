@@ -6,12 +6,12 @@
 
 volatile uint8_t elapsedtimeMS;
 /// @brief Initialization for the Ultrasonic Sensor
-/// This Sensor uses timer2 in CTC mode
 void Initialize_UltrasonicSensor() {
     // Set ECHO to input and TRIGGER to output
     DDRB |= (0 << ECHO_PIN) | (1 << TRIGGER_PIN);
 }
 
+/// @brief Sends a 10 microsecond pulse on the trigger pin
 void sendPulse() {
     PORTB &= ~(1 << TRIGGER_PIN);
     _delay_us(2);
@@ -20,6 +20,9 @@ void sendPulse() {
     PORTB &= ~(1 << TRIGGER_PIN);
 }
 
+/// @brief Measures time taken for the echo pin to detect
+/// the sound wave sent by the trigger pin.
+/// @return time taken for the echo pin to trigger
 uint16_t measureEcho() {
     uint16_t count = 0;
     while(!(PINB & (1 << ECHO_PIN)));
@@ -31,6 +34,8 @@ uint16_t measureEcho() {
     return count;
 }
 
+/// @brief Measures the distance the sound wave traveled
+/// @return Distance in cm
 uint16_t measureDistance() {
     sendPulse();
     uint16_t duration = measureEcho();
