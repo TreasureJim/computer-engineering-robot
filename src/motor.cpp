@@ -2,14 +2,12 @@
 #include <avr/interrupt.h>
 #include <stdint.h>
 #include <stdlib.h>
+#include <math.h>
 
 #include "pins.h"
 
-#define MOTOR_L_BASE_SPEED 100
-#define MOTOR_R_BASE_SPEED 100
-
 #define TIMER_TOP 0xFF
-#define MOTOR_MIN_PWM 200
+#define MOTOR_MIN_PWM 0
 
 /// @brief Initialise motor and timer registers
 void initialise_motors()
@@ -38,7 +36,14 @@ void drive_motors(float speed, float direction)
 	// float speed_rel = (float)speed / 255.0f;
 	uint8_t turn_factor_right = (direction + 1.0f) * ((255 - MOTOR_MIN_PWM) / 2.0f);
 	uint8_t turn_factor_left = (255 - MOTOR_MIN_PWM) - turn_factor_right;
-	
+
+	float speed_adjuster = (1.0f - fabs(direction));
+	if (speed_adjuster < 0.2f)
+	{
+		speed_adjuster = 0.2;
+	}
+	speed *= speed_adjuster;
+
 	// left motor
 	OCR0A = (MOTOR_MIN_PWM + turn_factor_left) * speed;
 	// OCR0A = 100;
@@ -59,9 +64,10 @@ void cut_motors()
 	TCCR0A &= ~(0b11 << COM0A0 | 0b11 << COM0B0);
 }
 
-void motorCalibration() {
-	//right motor
-	OCR0A = 255; 
-	//left motor
+void motorCalibration()
+{
+	// right motor
+	OCR0A = 255;
+	// left motor
 	OCR0B = 0;
 }
