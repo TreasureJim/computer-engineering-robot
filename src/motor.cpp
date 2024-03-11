@@ -38,11 +38,11 @@ void drive_motors(float speed, float direction)
 	uint8_t turn_factor_left = (255 - MOTOR_MIN_PWM) - turn_factor_right;
 
 	float speed_adjuster = (1.0f - fabs(direction));
-	if (speed_adjuster < 0.2f)
-	{
-		speed_adjuster = 0.2;
-	}
-	speed *= speed_adjuster;
+	// if (speed_adjuster < 0.2f)
+	// {
+	// 	speed_adjuster = 0.2;
+	// }
+	// speed *= speed_adjuster;
 
 	// left motor
 	OCR0A = (MOTOR_MIN_PWM + turn_factor_left) * speed;
@@ -50,6 +50,15 @@ void drive_motors(float speed, float direction)
 	// OCR0B = OCR0A;
 	// right motor
 	OCR0B = (MOTOR_MIN_PWM + turn_factor_right) * speed;
+
+	if (direction < 0.0)
+	{
+		OCR0B *= speed_adjuster;
+	}
+	else
+	{
+		OCR0A *= speed_adjuster;
+	}
 }
 
 /// @brief Starts output on motor pins
