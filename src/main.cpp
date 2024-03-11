@@ -17,6 +17,7 @@ float Hz = 10.0f;
 int main()
 {
 	sei();
+	PIDController_Init(&pidcontroller, Kp, Ki, Kd, Hz);
 	initialise_motors();
 	IR_InitialiseSensor();
 	Initialize_UltrasonicSensor();
@@ -34,6 +35,11 @@ RunningDiagnostics diagnostics;
 ISR(TIMER1_COMPA_vect)
 {
 	diagnostics.IR = IR_GetScaledValue(&IR_min, &IR_max);
-	diagnostics.PID = PIDController_Compute(&pidcontroller, 0.5f, diagnostics.IR);
-	Bluetooth_Send(&diagnostics, sizeof(diagnostics));
+	diagnostics.PID = PIDController_Compute(&pidcontroller, 0.6f, diagnostics.IR);
+
+	drive_motors(0.3f, diagnostics.PID);
+
+	char msg[30];
+	uint8_t msg_size = sprintf(msg, "IR: %.2f \r\n PID: %.2f\n", (double)diagnostics.IR, (double)diagnostics.PID);
+	Bluetooth_Send(msg, 30);
 }

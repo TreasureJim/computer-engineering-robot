@@ -8,7 +8,7 @@
 #include "helpers.h"
 
 #define RX_BUFFER_SIZE 10
-#define TX_BUFFER_SIZE 20
+#define TX_BUFFER_SIZE 40
 
 void Bluetooth_Initialise()
 {
