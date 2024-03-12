@@ -38,9 +38,10 @@ void drive_motors(float speed, float direction)
 	uint8_t turn_factor_left = (255 - MOTOR_MIN_PWM) - turn_factor_right;
 
 	float speed_adjuster = (1.0f - fabs(direction));
+	speed_adjuster *= speed_adjuster;
 
 	// decrease overall speed when turning
-	speed *= (1.0f - fabs(direction) * TURNING_SPEED_RATIO);
+	// speed *= (1.0f - fabs(direction) * TURNING_SPEED_RATIO);
 
 	if (direction < 0.0)
 	{
