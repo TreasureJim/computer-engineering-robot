@@ -6,6 +6,7 @@
 
 #include "pins.h"
 
+#define TURNING_SPEED_RATIO 0.05f
 #define TIMER_TOP 0xFF
 #define MOTOR_MIN_PWM 0
 
@@ -39,7 +40,7 @@ void drive_motors(float speed, float direction)
 	float speed_adjuster = (1.0f - fabs(direction));
 
 	// decrease overall speed when turning
-	speed *= (1.0f - fabs(direction) * 0.05);
+	speed *= (1.0f - fabs(direction) * TURNING_SPEED_RATIO);
 
 	if (direction < 0.0)
 	{
