@@ -6,6 +6,10 @@
 #define BAUD 9600
 #include <util/setbaud.h>
 #include "helpers.h"
+#include <util/delay.h>
+#include "irsensor.h"
+
+#include "motor.h"
 
 #define RX_BUFFER_SIZE 10
 #define TX_BUFFER_SIZE 40
@@ -89,19 +93,28 @@ void receive_command()
 
 	// uint8_t command = UDR0;
 
-	// switch (command)
-	// {
-	// case 0x02:
-	// 	Receive_Kp();
-	// 	break;
-	// 	// case 0x03:
-	// 	// 	break;
-	// 	// case 0x04:
-	// 	// 	break;
-	// case 0x06:
-	// 	Receive_IRCalibration();
-	// 	break;
-	// }
+	switch (command)
+	{
+	case 0x41: // 'A' start robot
+		start_motors();
+		break;
+	case 0x42: // 'B' penalty for robot
+		cli();
+		cut_motors();
+		_delay_ms(5000);
+		start_motors();
+		sei();
+		break;
+	case 0x43: // 'C' stop robot
+		cut_motors();
+		break;
+	case 0x44: // 'D' start calibrate
+		IR_CalibrateSensors(&IR_min, &IR_max);
+		break;
+	case 0x06:
+		Receive_IRCalibration();
+		break;
+	}
 }
 
 ISR(USART_RX_vect)

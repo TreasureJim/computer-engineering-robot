@@ -2,6 +2,8 @@
 #include "pins.h"
 #include "motor.h"
 #include <util/delay.h>
+#include "bluetooth.h"
+#include <stdio.h>
 
 uint8_t IR_min;
 uint8_t IR_max;
@@ -109,7 +111,7 @@ float IR_GetScaledValue(uint8_t *min, uint8_t *max)
 /// @param max max value of sensors
 void IR_CalibrateSensors(uint8_t *min, uint8_t *max)
 {
-	start_motors();
+	// start_motors();
 	_delay_ms(1000);
 	motorCalibration();
 	uint8_t localMin;
@@ -118,4 +120,9 @@ void IR_CalibrateSensors(uint8_t *min, uint8_t *max)
 	*min = localMin;
 	*max = localMax;
 	cut_motors();
+
+	char msg[30];
+	uint8_t msg_size = sprintf(msg, "IR: min %x max %x\n", localMin, localMax);
+	Bluetooth_Send(msg, msg_size + 1);
+	_delay_ms(100);
 }

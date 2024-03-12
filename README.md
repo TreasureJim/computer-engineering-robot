@@ -45,14 +45,14 @@ Name of bluetooth module is ... (TODO)
 
 Each separate `|` represents a separate byte message
 
-Load calibration - `0x01` (Unfinished)
+Start Robot - `'A'`
 
-Set Kp - `0x02 | value (4 bytes float)`
+Penalty Time - `'B'`
 
-Set Ki - `0x03 | value (4 bytes float)`
+Stop Robot - `'C'`
 
-Set Kd - `0x04 | value (4 bytes float)`
-
-Set Goal Position - `0x05` (unfinished)
+Start Calibration - `'D'`
 
 Set IR Calibration - `0x06 | min (1 byte) | max (1 byte)`
+
+Set Goal Position - `0x05` (unfinished)
