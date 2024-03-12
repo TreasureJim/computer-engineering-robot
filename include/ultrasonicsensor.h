@@ -11,7 +11,5 @@ void Initialize_UltrasonicSensor();
 uint16_t measureEcho();
 uint16_t measureDistance();
 void sendPulse();
-void startUSTimer();
-void stopUSTimer();
 
 #endif

@@ -26,5 +26,5 @@ float PIDController_Compute(PIDController *pid, float goalvalue, float measureme
 void PID_Timer_Init();
 void PID_Start();
 void PID_Stop();
-
+void PID_Timer_Init();
 #endif
