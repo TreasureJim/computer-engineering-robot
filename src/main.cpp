@@ -30,7 +30,7 @@ int main()
 	Bluetooth_Initialise();
 	IR_InitialiseSensor();
 	PIDController_Init(&pidcontroller, Kp, Ki, Kd, Hz);
-	// Initialize_UltrasonicSensor();
+	Initialize_UltrasonicSensor();
 	initialise_motors();
 
 	IR_min = 0x3f;
@@ -45,19 +45,30 @@ int main()
 	Bluetooth_Send(msg, sizeof(msg));
 	_delay_ms(100);
 
+	PID_Timer_Init();
+	PID_Start();
+
 	while (1)
 	{
-		diagnostics.IR = IR_GetScaledValue(&IR_min, &IR_max);
-		diagnostics.PID = PIDController_Compute(&pidcontroller, 0.62f, diagnostics.IR);
-		drive_motors(1.0f, diagnostics.PID);
+
+		// diagnostics.IR = IR_GetScaledValue(&IR_min, &IR_max);
+		// diagnostics.PID = PIDController_Compute(&pidcontroller, 0.62f, diagnostics.IR);
+		// drive_motors(1.0f, diagnostics.PID);
 	};
 }
 
 ISR(TIMER1_COMPA_vect)
 {
-	// diagnostics.IR = IR_GetScaledValue(&IR_min, &IR_max);
-	// diagnostics.PID = PIDController_Compute(&pidcontroller, 0.62f, diagnostics.IR);
-	// drive_motors(1.0f, diagnostics.PID);
+	if (measureDistance() < 20)
+	{
+		drive_motors(0.0, 0.0);
+		return;
+	}
+
+	diagnostics.IR = IR_GetScaledValue(&IR_min, &IR_max);
+	diagnostics.PID = PIDController_Compute(&pidcontroller, 0.62f, diagnostics.IR);
+	drive_motors(1.0f, diagnostics.PID);
+
 	// if (diagnostics.IR > 0.8f)
 	// {
 	// 	_delay_ms(1);
@@ -77,12 +88,6 @@ ISR(TIMER1_COMPA_vect)
 	// 	}
 	// }
 
-	// if (measureDistance() < 20)
-	// {
-	// 	cut_motors();
-	// 	return;
-	// }
-	// start_motors();
 	// char msg[30];
 	// uint8_t msg_size = sprintf(msg, "IR: %f PID: %f\n", (double)diagnostics.IR, (double)diagnostics.PID);
 	// Bluetooth_Send(msg, msg_size + 1);
