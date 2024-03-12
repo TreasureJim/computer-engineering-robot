@@ -1,7 +1,6 @@
 #include "ultrasonicsensor.h"
 #include <avr/io.h>
 
-#define F_CPU 16000000UL
 #define SPEED_OF_SOUND 343
 
 volatile uint8_t elapsedtimeMS;

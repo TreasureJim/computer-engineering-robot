@@ -12,7 +12,7 @@
 #include "motor.h"
 
 #define RX_BUFFER_SIZE 10
-#define TX_BUFFER_SIZE 20
+#define TX_BUFFER_SIZE 40
 
 void Bluetooth_Initialise()
 {
@@ -91,7 +91,7 @@ void receive_command()
 	rx_byte_count = 0;
 	rx_num_bytes_goal = 0;
 
-	uint8_t command = UDR0;
+	// uint8_t command = UDR0;
 
 	switch (command)
 	{

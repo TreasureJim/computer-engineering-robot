@@ -47,10 +47,10 @@ void IR_GetLimits(uint8_t *min, uint8_t *max)
 {
 	uint8_t localMin = 255;
 	uint8_t localMax = 0;
-	for (int i = 0; i <= 500; i++)
+	for (int i = 0; i <= 300; i++)
 	{
 		uint8_t val1 = IR_ReadSensor(midMidSensor);
-		_delay_ms(10);
+		_delay_ms(5);
 		if (val1 < localMin)
 		{
 			localMin = val1;
@@ -59,16 +59,26 @@ void IR_GetLimits(uint8_t *min, uint8_t *max)
 		{
 			localMax = val1;
 		}
-		// uint8_t val2 = IR_ReadSensor(rightSensor);
-		// _delay_ms(10);
-		// if (val2 < localMin)
-		// {
-		// 	localMin = val2;
-		// }
-		// else if (val2 > localMax)
-		// {
-		// 	localMax = val2;
-		// }
+		uint8_t val2 = IR_ReadSensor(rightMidSensor);
+		_delay_ms(5);
+		if (val2 < localMin)
+		{
+			localMin = val2;
+		}
+		else if (val2 > localMax)
+		{
+			localMax = val2;
+		}
+		uint8_t val3 = IR_ReadSensor(leftMidSensor);
+		_delay_ms(5);
+		if (val3 < localMin)
+		{
+			localMin = val3;
+		}
+		else if (val3 > localMax)
+		{
+			localMax = val3;
+		}
 	}
 	*min = localMin;
 	*max = localMax;
@@ -81,8 +91,6 @@ uint8_t IR_GetAverageValue()
 	uint8_t v1 = IR_ReadSensor(rightMidSensor);
 	uint8_t v2 = IR_ReadSensor(leftMidSensor);
 	uint8_t v3 = IR_ReadSensor(midMidSensor);
-	// uint8_t v4 = IR_ReadSensor(leftSensor);
-	// uint8_t v5 = IR_ReadSensor(rightSensor);
 	return ((v1 + v2 + v3) / 3);
 }
 
