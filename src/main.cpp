@@ -31,12 +31,11 @@ int main()
 	initialise_motors();
 
 	// Sensor Calibration routine
-	IR_CalibrateSensors(&IR_min, &IR_max);
-	// IR_min = 60;
-	// IR_max = 255;
 	SetError();
-	_delay_ms(5000);
+	IR_CalibrateSensors(&IR_min, &IR_max);
 	ClearError();
+
+	_delay_ms(5000);
 
 	start_motors();
 
