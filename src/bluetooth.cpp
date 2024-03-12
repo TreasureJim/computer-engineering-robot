@@ -91,7 +91,7 @@ void receive_command()
 	rx_byte_count = 0;
 	rx_num_bytes_goal = 0;
 
-	// uint8_t command = UDR0;
+	uint8_t command = UDR0;
 
 	switch (command)
 	{
