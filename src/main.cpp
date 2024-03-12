@@ -16,31 +16,34 @@
 
 RunningDiagnostics diagnostics;
 PIDController pidcontroller;
-float Kp = 7.0f, Ki = 0.0f, Kd = 3.25f;
+float Kp = 7.5f, Ki = 0.0f, Kd = 3.5f;
 float Hz = 10.0f;
 
 int main()
 {
 	// Initializations
 	sei();
+
 	DDRB |= (1 << PINB2);
+	ClearError();
+
 	Bluetooth_Initialise();
 	IR_InitialiseSensor();
 	PIDController_Init(&pidcontroller, Kp, Ki, Kd, Hz);
 	// Initialize_UltrasonicSensor();
 	initialise_motors();
 
+	IR_min = 0x3f;
+	IR_max = 0xe1;
+
+	_delay_ms(4000);
+
 	// Sensor Calibration routine
-	SetError();
-	IR_CalibrateSensors(&IR_min, &IR_max);
-	ClearError();
+	// IR_CalibrateSensors(&IR_min, &IR_max);
 
-	_delay_ms(5000);
-
-	start_motors();
-
-	// PID_Timer_Init();
-	// PID_Start();
+	char msg[] = "Running\n";
+	Bluetooth_Send(msg, sizeof(msg));
+	_delay_ms(100);
 
 	while (1)
 	{
@@ -49,8 +52,6 @@ int main()
 		drive_motors(1.0f, diagnostics.PID);
 	};
 }
-
-uint8_t lap_counter = 0;
 
 ISR(TIMER1_COMPA_vect)
 {
