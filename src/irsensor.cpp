@@ -4,9 +4,10 @@
 #include <util/delay.h>
 #include "bluetooth.h"
 #include <stdio.h>
+#include "helpers.h"
 
-uint8_t IR_min;
-uint8_t IR_max;
+uint8_t IR_min = 0;
+uint8_t IR_max = 255;
 
 /// @brief Sensor initialization for the DDR and ADC.
 void IR_InitialiseSensor()
@@ -111,6 +112,7 @@ float IR_GetScaledValue(uint8_t *min, uint8_t *max)
 /// @param max max value of sensors
 void IR_CalibrateSensors(uint8_t *min, uint8_t *max)
 {
+	SetError();
 	// start_motors();
 	_delay_ms(1000);
 	motorCalibration();
@@ -120,6 +122,7 @@ void IR_CalibrateSensors(uint8_t *min, uint8_t *max)
 	*min = localMin;
 	*max = localMax;
 	cut_motors();
+	ClearError();
 
 	char msg[30];
 	uint8_t msg_size = sprintf(msg, "IR: min %x max %x\n", localMin, localMax);
