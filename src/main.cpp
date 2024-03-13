@@ -16,7 +16,7 @@
 #define PID_INTERRUPT_HZ 30
 RunningDiagnostics diagnostics;
 PIDController pidcontroller;
-float Kp = 7.5f, Ki = 0.0f, Kd = 3.5f;
+float Kp = 8.0f, Ki = 0.0f, Kd = 3.5f;
 float Hz = 10.0f;
 uint8_t counter = 0;
 int main()
@@ -30,11 +30,11 @@ int main()
 	Bluetooth_Initialise();
 	IR_InitialiseSensor();
 	PIDController_Init(&pidcontroller, Kp, Ki, Kd, Hz);
-	Initialize_UltrasonicSensor();
+	// Initialize_UltrasonicSensor();
 	initialise_motors();
 
-	IR_min = 0x3f;
-	IR_max = 0xe1;
+	IR_min = 0x22;
+	IR_max = 0xf0;
 
 	_delay_ms(4000);
 
@@ -53,15 +53,19 @@ int main()
 
 ISR(TIMER1_COMPA_vect)
 {
-	counter++;
-	if ((counter % 8) == 0)
-	{
-		if (measureDistance() < 20)
-		{
-			drive_motors(0.0, 0.0);
-			return;
-		}
-	}
+	// counter++;
+	// if ((counter % 8) == 0)
+	// {
+	// 	if (measureDistance() < 20)
+	// 	{
+	// 		drive_motors(0.0, 0.0);
+	// 		return;
+	// 	}
+	// }
+
+	/*
+	If ultrasonic is < 20 stop, rotate on spot, set new goal value, start driving
+	*/
 
 	diagnostics.IR = IR_GetScaledValue(&IR_min, &IR_max);
 	diagnostics.PID = PIDController_Compute(&pidcontroller, 0.62f, diagnostics.IR);

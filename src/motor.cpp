@@ -3,6 +3,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <math.h>
+#include "helpers.h"
 
 #include "pins.h"
 
@@ -29,34 +30,34 @@ void initialise_motors()
 	TCCR0B = 0b0 << WGM02 | 0b010 << CS00;
 }
 
+#define E_X_SHIFT -0.1f
+#define E_EXP 5.2f
+float sigmoid(float x)
+{
+	float y = 1 / (1 + expf(-E_EXP * (x - E_X_SHIFT)));
+	if (y < 0.0f)
+	{
+		return 0.0f;
+	}
+	if (y > 1.0f)
+	{
+		return 1.0f;
+	}
+	return y;
+}
+
 /// @brief Change the direction of the car by changing the PWM to the motors
 /// @param speed float between 0 and 1 which changes the overall speed
 /// @param direction float between -1 and 1 where -1 is completely left and 1 is completely right and 0 is straight
 void drive_motors(float speed, float direction)
 {
-	uint8_t turn_factor_right = (direction + 1.0f) * ((255 - MOTOR_MIN_PWM) / 2.0f);
-	uint8_t turn_factor_left = (255 - MOTOR_MIN_PWM) - turn_factor_right;
 
-	float speed_adjuster = (1.0f - fabs(direction));
-	// speed_adjuster *= speed_adjuster;
+	float overall = 255.0f * speed;
 
-	// decrease overall speed when turning
-	// speed *= (1.0f - fabs(direction) * TURNING_SPEED_RATIO);
-
-	if (direction < 0.0)
-	{
-		// left motor
-		OCR0A = (MOTOR_MIN_PWM + turn_factor_left) * speed;
-		// right motor
-		OCR0B = (MOTOR_MIN_PWM + turn_factor_right) * speed * speed_adjuster;
-	}
-	else
-	{
-		// left motor
-		OCR0A = (MOTOR_MIN_PWM + turn_factor_left) * speed * speed_adjuster;
-		// right motor
-		OCR0B = (MOTOR_MIN_PWM + turn_factor_right) * speed;
-	}
+	// left motor
+	OCR0A = overall * sigmoid(-1 * direction);
+	// right motor
+	OCR0B = overall * sigmoid(direction);
 }
 
 /// @brief Starts output on motor pins
