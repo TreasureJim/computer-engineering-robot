@@ -86,6 +86,7 @@ uint8_t rx_buffer[RX_BUFFER_SIZE];
 uint8_t rx_byte_count = 0;
 uint8_t rx_num_bytes_goal = 0;
 
+char respond_ok = 'Z';
 void receive_command()
 {
 	rx_byte_count = 0;
@@ -96,9 +97,13 @@ void receive_command()
 	switch (command)
 	{
 	case 0x41: // 'A' start robot
+		Bluetooth_Send(&respond_ok, sizeof(respond_ok));
+		cli();
 		start_motors();
+		sei();
 		break;
 	case 0x42: // 'B' penalty for robot
+		Bluetooth_Send(&respond_ok, sizeof(respond_ok));
 		cli();
 		cut_motors();
 		_delay_ms(5000);
@@ -106,10 +111,15 @@ void receive_command()
 		sei();
 		break;
 	case 0x43: // 'C' stop robot
+		Bluetooth_Send(&respond_ok, sizeof(respond_ok));
+		cli();
 		cut_motors();
+		sei();
 		break;
 	case 0x44: // 'D' start calibrate
+		cli();
 		IR_CalibrateSensors(&IR_min, &IR_max);
+		sei();
 		break;
 	case 0x06:
 		Receive_IRCalibration();
