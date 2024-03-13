@@ -13,12 +13,12 @@
 #include <stdlib.h>
 
 #define GOAL_LAPS 1
-
+#define PID_INTERRUPT_HZ 30
 RunningDiagnostics diagnostics;
 PIDController pidcontroller;
 float Kp = 7.5f, Ki = 0.0f, Kd = 3.5f;
 float Hz = 10.0f;
-
+uint8_t counter = 0;
 int main()
 {
 	// Initializations
@@ -47,48 +47,21 @@ int main()
 
 	PID_Timer_Init();
 	PID_Start();
-
-	while (1)
-	{
-
-		// diagnostics.IR = IR_GetScaledValue(&IR_min, &IR_max);
-		// diagnostics.PID = PIDController_Compute(&pidcontroller, 0.62f, diagnostics.IR);
-		// drive_motors(1.0f, diagnostics.PID);
-	};
+	while(1);
 }
 
 ISR(TIMER1_COMPA_vect)
 {
-	if (measureDistance() < 20)
-	{
-		drive_motors(0.0, 0.0);
-		return;
+	counter++;
+	if((counter % 8) == 0) {
+		if (measureDistance() < 20)
+		{
+			drive_motors(0.0, 0.0);
+			return;
+		}
 	}
 
 	diagnostics.IR = IR_GetScaledValue(&IR_min, &IR_max);
 	diagnostics.PID = PIDController_Compute(&pidcontroller, 0.62f, diagnostics.IR);
 	drive_motors(1.0f, diagnostics.PID);
-
-	// if (diagnostics.IR > 0.8f)
-	// {
-	// 	_delay_ms(1);
-	// 	diagnostics.IR = IR_GetScaledValue(&IR_min, &IR_max);
-	// 	if (diagnostics.IR < 0.4f)
-	// 	{
-	// 		lap_counter++;
-	// 		_delay_ms(1);
-	// 		if (lap_counter > GOAL_LAPS)
-	// 		{
-	// 			cli();
-	// 			cut_motors();
-	// 			PID_Stop();
-	// 			BlinkLED();
-	// 			exit(1);
-	// 		}
-	// 	}
-	// }
-
-	// char msg[30];
-	// uint8_t msg_size = sprintf(msg, "IR: %f PID: %f\n", (double)diagnostics.IR, (double)diagnostics.PID);
-	// Bluetooth_Send(msg, msg_size + 1);
 }
