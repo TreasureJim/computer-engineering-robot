@@ -47,13 +47,15 @@ int main()
 
 	PID_Timer_Init();
 	PID_Start();
-	while(1);
+	while (1)
+		;
 }
 
 ISR(TIMER1_COMPA_vect)
 {
 	counter++;
-	if((counter % 8) == 0) {
+	if ((counter % 8) == 0)
+	{
 		if (measureDistance() < 20)
 		{
 			drive_motors(0.0, 0.0);

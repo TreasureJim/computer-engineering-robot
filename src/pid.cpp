@@ -68,5 +68,5 @@ void PID_Timer_Init()
 	// TCCR1B = 0b11 << WGM12 | 0b100 << CS10;
 	// ICR1 = 15625;
 	TCCR1B = 0b11 << WGM12 | 0b011 << CS10;
-	ICR1 = 6250;
+	ICR1 = 8333;
 }
