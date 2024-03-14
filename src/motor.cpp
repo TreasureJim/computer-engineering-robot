@@ -7,7 +7,7 @@
 
 #include "pins.h"
 
-#define TURNING_SPEED_RATIO 0.05f
+#define TURNING_SPEED_RATIO 0.1f
 #define TIMER_TOP 0xFF
 #define MOTOR_MIN_PWM 0
 
@@ -31,7 +31,7 @@ void initialise_motors()
 }
 
 #define E_X_SHIFT -0.1f
-#define E_EXP 5.2f
+#define E_EXP 5.6f
 float sigmoid(float x)
 {
 	float y = 1 / (1 + expf(-E_EXP * (x - E_X_SHIFT)));
@@ -51,13 +51,24 @@ float sigmoid(float x)
 /// @param direction float between -1 and 1 where -1 is completely left and 1 is completely right and 0 is straight
 void drive_motors(float speed, float direction)
 {
-
 	float overall = 255.0f * speed;
+	// overall *= (1.0f - fabs(direction) * TURNING_SPEED_RATIO);
+	float speed_adjuster = (1.0f - fabs(direction));
 
-	// left motor
-	OCR0A = overall * sigmoid(-1 * direction);
-	// right motor
-	OCR0B = overall * sigmoid(direction);
+	if (direction < 0.0)
+	{
+		// left motor
+		OCR0A = overall * sigmoid(-1 * direction);
+		// right motor
+		OCR0B = overall * sigmoid(direction) * speed_adjuster;
+	}
+	else
+	{
+		// left motor
+		OCR0A = overall * sigmoid(-1 * direction) * speed_adjuster;
+		// right motor
+		OCR0B = overall * sigmoid(direction);
+	}
 }
 
 /// @brief Starts output on motor pins

@@ -16,7 +16,7 @@
 #define PID_INTERRUPT_HZ 30
 RunningDiagnostics diagnostics;
 PIDController pidcontroller;
-float Kp = 8.0f, Ki = 0.0f, Kd = 3.5f;
+float Kp = 7.5f, Ki = 0.0f, Kd = 5.0f;
 float Hz = 10.0f;
 uint8_t counter = 0;
 int main()
